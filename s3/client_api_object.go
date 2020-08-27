@@ -16,7 +16,7 @@ func (svc *S3) IsExistObject(ctx context.Context, bucket, path string) (bool, er
 	return res.IsExist, nil
 }
 
-// GetObjectFromPath gets object from given path.
+// GetObjectFromPath gets an object from `path`.
 func (svc *S3) GetObjectFromPath(ctx context.Context, bucket, path string) (*GetObjectResult, error) {
 	return svc.GetObject(ctx, GetObjectRequest{
 		Bucket: bucket,
@@ -24,7 +24,7 @@ func (svc *S3) GetObjectFromPath(ctx context.Context, bucket, path string) (*Get
 	})
 }
 
-// DeleteObjectFromPath deletes object from given path.
+// DeleteObjectFromPath deletes an object from `path`.
 func (svc *S3) DeleteObjectFromPath(ctx context.Context, bucket, path string) (*DeleteObjectResult, error) {
 	return svc.DeleteObject(ctx, DeleteObjectRequest{
 		Bucket: bucket,
@@ -32,7 +32,7 @@ func (svc *S3) DeleteObjectFromPath(ctx context.Context, bucket, path string) (*
 	})
 }
 
-// PutObjectToPath puts object to given path and bytes data.
+// PutObjectToPath puts an object to the `path` and bytes data.
 func (svc *S3) PutObjectToPath(ctx context.Context, bucket, path string, data []byte) (*PutObjectResult, error) {
 	return svc.PutObject(ctx, PutObjectRequest{
 		Bucket:    bucket,

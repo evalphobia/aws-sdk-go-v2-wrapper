@@ -28,4 +28,4 @@ jobs:
         make test-coverage
     - name: Send Coverage
       run: |
-        make test-coverage
+        make send-coverage
