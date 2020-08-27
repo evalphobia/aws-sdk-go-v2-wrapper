@@ -27,5 +27,7 @@ jobs:
         make init
         make test-coverage
     - name: Send Coverage
+      env:
+        COVERALLS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         make send-coverage
