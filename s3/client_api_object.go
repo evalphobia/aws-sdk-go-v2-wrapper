@@ -2,6 +2,7 @@ package s3
 
 import (
 	"context"
+	"time"
 )
 
 // IsExistObject checks if the object exists or not.
@@ -22,6 +23,16 @@ func (svc *S3) GetObjectFromPath(ctx context.Context, bucket, path string) (*Get
 		Bucket: bucket,
 		Key:    path,
 	})
+}
+
+// GetPresignURL gets an presigned url of the object for GET.
+func (svc *S3) GetPresignURL(ctx context.Context, bucket, path string, dur time.Duration) (string, error) {
+	in := GetObjectRequest{
+		Bucket: bucket,
+		Key:    path,
+	}.ToInput()
+	r := svc.client.GetObjectRequest(in)
+	return r.Presign(dur)
 }
 
 // DeleteObjectFromPath deletes an object from `path`.
