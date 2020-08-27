@@ -26,14 +26,15 @@ func New(conf config.Config) (*S3, error) {
 	if err != nil {
 		return nil, err
 	}
+	if conf.Endpoints.HasS3() {
+		c.EndpointResolver = conf.Endpoints.GetS3()
+	}
 
 	cli := SDK.New(c)
+	// use force path style when using custom endpoint
 	switch {
-	case conf.Endpoints.HasS3():
-		c.EndpointResolver = conf.Endpoints.GetS3()
-		// c.DisableEndpointHostPrefix = true
-		cli.ForcePathStyle = true
-	case conf.CommonEndpoint != "":
+	case conf.Endpoints.HasS3(),
+		conf.CommonEndpoint != "":
 		cli.ForcePathStyle = true
 	}
 
