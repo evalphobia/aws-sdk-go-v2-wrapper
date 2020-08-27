@@ -412,7 +412,6 @@ func newLifecycleRuleFilter(o *SDK.LifecycleRuleFilter) LifecycleRuleFilter {
 		if len(a.Tags) != 0 {
 			result.AndOperatorTags = newTags(a.Tags)
 		}
-
 	}
 	if o.Prefix != nil {
 		result.Prefix = *o.Prefix

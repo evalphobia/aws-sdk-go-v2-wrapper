@@ -5,8 +5,6 @@ import (
 	"testing"
 
 	"github.com/matryer/is"
-
-	_ "github.com/evalphobia/go-loghttp/format/dumpheader"
 )
 
 func TestHeadBucket(t *testing.T) {
@@ -24,14 +22,14 @@ func TestHeadBucket(t *testing.T) {
 	is.NoErr(err)
 	is.True(!ok) // non-existed bucket shold be false
 
-	svc.CreateBucketFromName(ctx, testPutBucketName)
+	_, _ = svc.CreateBucketFromName(ctx, testPutBucketName)
 	ok, err = svc.HeadBucket(ctx, HeadBucketRequest{
 		Bucket: testPutBucketName,
 	})
 	is.NoErr(err)
 	is.True(ok) // existed bucket shold be true
 
-	svc.DeleteBucketFromName(ctx, testPutBucketName)
+	_ = svc.DeleteBucketFromName(ctx, testPutBucketName)
 	ok, err = svc.HeadBucket(ctx, HeadBucketRequest{
 		Bucket: testPutBucketName,
 	})

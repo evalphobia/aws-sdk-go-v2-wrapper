@@ -11,7 +11,7 @@ func TestPutObject(t *testing.T) {
 	is := is.NewRelaxed(t)
 	ctx := context.Background()
 	svc := getTestClient(t)
-	createBucket(testPutBucketName)
+	_ = createTestBucket(testPutBucketName)
 
 	// 1st put
 	resPut, err := svc.PutObject(ctx, PutObjectRequest{

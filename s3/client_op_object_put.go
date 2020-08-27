@@ -56,7 +56,7 @@ type PutObjectRequest struct {
 	SSECustomerKey            string
 	SSECustomerKeyMD5         string
 	SSEKMSEncryptionContext   string
-	SSEKMSKeyId               string
+	SSEKMSKeyID               string
 	ServerSideEncryption      ServerSideEncryption
 	StorageClass              StorageClass
 	Tagging                   string
@@ -123,8 +123,8 @@ func (r PutObjectRequest) ToInput() *SDK.PutObjectInput {
 	if r.SSEKMSEncryptionContext != "" {
 		in.SSEKMSEncryptionContext = pointers.String(r.SSEKMSEncryptionContext)
 	}
-	if r.SSEKMSKeyId != "" {
-		in.SSEKMSKeyId = pointers.String(r.SSEKMSKeyId)
+	if r.SSEKMSKeyID != "" {
+		in.SSEKMSKeyId = pointers.String(r.SSEKMSKeyID)
 	}
 	if r.Tagging != "" {
 		in.Tagging = pointers.String(r.Tagging)
@@ -172,7 +172,7 @@ type PutObjectResult struct {
 	SSECustomerAlgorithm    string
 	SSECustomerKeyMD5       string
 	SSEKMSEncryptionContext string
-	SSEKMSKeyId             string
+	SSEKMSKeyID             string
 	ServerSideEncryption    ServerSideEncryption
 	VersionID               string
 }
@@ -199,7 +199,7 @@ func NewPutObjectResult(output *SDK.PutObjectResponse) *PutObjectResult {
 		r.SSEKMSEncryptionContext = *output.SSEKMSEncryptionContext
 	}
 	if output.SSEKMSKeyId != nil {
-		r.SSEKMSKeyId = *output.SSEKMSKeyId
+		r.SSEKMSKeyID = *output.SSEKMSKeyId
 	}
 	if output.VersionId != nil {
 		r.VersionID = *output.VersionId

@@ -121,7 +121,7 @@ type HeadObjectResult struct {
 	Restore                   string
 	SSECustomerAlgorithm      string
 	SSECustomerKeyMD5         string
-	SSEKMSKeyId               string
+	SSEKMSKeyID               string
 	ServerSideEncryption      ServerSideEncryption
 	StorageClass              StorageClass
 	VersionID                 string
@@ -188,7 +188,7 @@ func NewHeadObjectResult(output *SDK.HeadObjectResponse) *HeadObjectResult {
 		r.SSECustomerKeyMD5 = *output.SSECustomerKeyMD5
 	}
 	if output.SSEKMSKeyId != nil {
-		r.SSEKMSKeyId = *output.SSEKMSKeyId
+		r.SSEKMSKeyID = *output.SSEKMSKeyId
 	}
 	if output.VersionId != nil {
 		r.VersionID = *output.VersionId

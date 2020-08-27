@@ -5,15 +5,13 @@ import (
 	"testing"
 
 	"github.com/matryer/is"
-
-	_ "github.com/evalphobia/go-loghttp/format/dumpheader"
 )
 
 func TestClientAPIObject(t *testing.T) {
 	is := is.NewRelaxed(t)
 	ctx := context.Background()
 	svc := getTestClient(t)
-	createBucket(testPutBucketName)
+	_ = createTestBucket(testPutBucketName)
 
 	const path = "TestClientAPIObject/test"
 

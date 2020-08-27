@@ -112,7 +112,7 @@ func (svc *S3) RawGetBucketAccelerateConfiguration(ctx context.Context, in *SDK.
 }
 
 // RawGetBucketAcl executes `GetBucketAcl` raw operation.
-func (svc *S3) RawGetBucketAcl(ctx context.Context, in *SDK.GetBucketAclInput) (*SDK.GetBucketAclResponse, error) {
+func (svc *S3) RawGetBucketAcl(ctx context.Context, in *SDK.GetBucketAclInput) (*SDK.GetBucketAclResponse, error) { // nolint:golint
 	return svc.client.GetBucketAclRequest(in).Send(ctx)
 }
 
@@ -212,7 +212,7 @@ func (svc *S3) RawGetObject(ctx context.Context, in *SDK.GetObjectInput) (*SDK.G
 }
 
 // RawGetObjectAcl executes `GetObjectAcl` raw operation.
-func (svc *S3) RawGetObjectAcl(ctx context.Context, in *SDK.GetObjectAclInput) (*SDK.GetObjectAclResponse, error) {
+func (svc *S3) RawGetObjectAcl(ctx context.Context, in *SDK.GetObjectAclInput) (*SDK.GetObjectAclResponse, error) { // nolint:golint
 	return svc.client.GetObjectAclRequest(in).Send(ctx)
 }
 
@@ -307,7 +307,7 @@ func (svc *S3) RawPutBucketAccelerateConfiguration(ctx context.Context, in *SDK.
 }
 
 // RawPutBucketAcl executes `PutBucketAcl` raw operation.
-func (svc *S3) RawPutBucketAcl(ctx context.Context, in *SDK.PutBucketAclInput) (*SDK.PutBucketAclResponse, error) {
+func (svc *S3) RawPutBucketAcl(ctx context.Context, in *SDK.PutBucketAclInput) (*SDK.PutBucketAclResponse, error) { // nolint:golint
 	return svc.client.PutBucketAclRequest(in).Send(ctx)
 }
 
@@ -397,7 +397,7 @@ func (svc *S3) RawPutObject(ctx context.Context, in *SDK.PutObjectInput) (*SDK.P
 }
 
 // RawPutObjectAcl executes `PutObjectAcl` raw operation.
-func (svc *S3) RawPutObjectAcl(ctx context.Context, in *SDK.PutObjectAclInput) (*SDK.PutObjectAclResponse, error) {
+func (svc *S3) RawPutObjectAcl(ctx context.Context, in *SDK.PutObjectAclInput) (*SDK.PutObjectAclResponse, error) { // nolint:golint
 	return svc.client.PutObjectAclRequest(in).Send(ctx)
 }
 

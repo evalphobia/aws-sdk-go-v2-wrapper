@@ -11,7 +11,7 @@ func TestDeleteObject(t *testing.T) {
 	is := is.NewRelaxed(t)
 	ctx := context.Background()
 	svc := getTestClient(t)
-	createBucket(testPutBucketName)
+	_ = createTestBucket(testPutBucketName)
 
 	_, err := svc.PutObject(ctx, PutObjectRequest{
 		Bucket:    testPutBucketName,

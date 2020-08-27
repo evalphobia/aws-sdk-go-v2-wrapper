@@ -5,12 +5,9 @@ import (
 	"testing"
 
 	"github.com/matryer/is"
-
-	_ "github.com/evalphobia/go-loghttp/format/dumpheader"
 )
 
 func TestClientAPIBucket(t *testing.T) {
-	const nonExistedBucket = "non-existed-bucket--xxx"
 	is := is.NewRelaxed(t)
 	ctx := context.Background()
 	svc := getTestClient(t)
@@ -24,7 +21,6 @@ func TestClientAPIBucket(t *testing.T) {
 		_, err = svc.CreateBucketFromName(ctx, testPutBucketName)
 		// is.True(err != nil) // already created bucket
 		is.NoErr(err) // already created bucket does not error on FakeS3
-
 	})
 
 	t.Run("DeleteBucketFromName", func(t *testing.T) {

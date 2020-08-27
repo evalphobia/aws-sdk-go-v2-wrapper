@@ -152,7 +152,7 @@ type GetObjectResult struct {
 	Restore                   string
 	SSECustomerAlgorithm      string
 	SSECustomerKeyMD5         string
-	SSEKMSKeyId               string
+	SSEKMSKeyID               string
 	ServerSideEncryption      ServerSideEncryption
 	StorageClass              StorageClass
 	TagCount                  int64
@@ -226,7 +226,7 @@ func NewGetObjectResult(output *SDK.GetObjectResponse) *GetObjectResult {
 		r.SSECustomerKeyMD5 = *output.SSECustomerKeyMD5
 	}
 	if output.SSEKMSKeyId != nil {
-		r.SSEKMSKeyId = *output.SSEKMSKeyId
+		r.SSEKMSKeyID = *output.SSEKMSKeyId
 	}
 	if output.TagCount != nil {
 		r.TagCount = *output.TagCount

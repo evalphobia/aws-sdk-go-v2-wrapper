@@ -14,12 +14,7 @@ import (
 const (
 	defaultEndpoint = "http://localhost:4567"
 
-	testEmptyBucketName = "test-empty-bucket"
-	testPutBucketName   = "test-put-bucket"
-	testCopyBucketName  = "test-copy-bucket"
-
-	testS3Path  = "test_path"
-	testBaseURL = "http://localhost:4567/" + testPutBucketName
+	testPutBucketName = "test-put-bucket"
 )
 
 func TestNew(t *testing.T) {
@@ -80,7 +75,7 @@ func getTestClient(t *testing.T) *S3 {
 	return svc
 }
 
-func createBucket(name string) error {
+func createTestBucket(name string) error {
 	svc, err := New(getTestConfig())
 	if err != nil {
 		return err
@@ -98,20 +93,3 @@ func createBucket(name string) error {
 	_, err = svc.CreateBucketFromName(ctx, name)
 	return err
 }
-
-// func testPutObject(t *testing.T) {
-// 	is := is.NewRelaxed(t)
-// 	createBucket(testPutBucketName)
-// 	f := openFile(t)
-// 	defer f.Close() // nolint:gosec
-
-// 	svc := getTestClient(t)
-// 	b, err := svc.GetBucket(testPutBucketName)
-// 	is.NoErr(err)
-
-// 	obj := NewPutObject(f)
-// 	b.PutOne(obj, testS3Path, ACLPublicRead)
-
-// 	err = b.PutAll()
-// 	is.NoErr(err)
-// }
