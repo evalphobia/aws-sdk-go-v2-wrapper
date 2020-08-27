@@ -26,8 +26,12 @@ jobs:
       run: |
         make init
         make test-coverage
-    - name: Send Coverage
+    - name: Send Coverage to coveralls
       env:
         COVERALLS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         make send-coverage
+    - name: Send Coverage to codecov
+      uses: codecov/codecov-action@v1
+      with:
+        file: gotest.cov
