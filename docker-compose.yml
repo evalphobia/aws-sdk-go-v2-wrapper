@@ -1,0 +1,8 @@
+version: '3'
+services:
+  s3:
+    image: evalphobia/fake-s3:1.0.0
+    volumes:
+      - ".local/s3_data:/s3_data"
+    ports:
+      - "4567:4567"

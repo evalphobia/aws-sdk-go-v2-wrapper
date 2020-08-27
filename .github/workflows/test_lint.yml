@@ -1,0 +1,57 @@
+name: lint
+
+on: [push, pull_request]
+
+env:
+  GO_VERSION: 1.14.2
+
+jobs:
+  tidy:
+    name: go mod tidy
+    runs-on: ubuntu-latest
+    steps:
+    - name: Set up Go ${{ env.GO_VERSION }}
+      uses: actions/setup-go@v2
+      with:
+        go-version: ${{ env.GO_VERSION }}
+      id: go
+    - name: setup env
+      run: |
+        echo "::set-env name=GOPATH::$(go env GOPATH)"
+        echo "::add-path::$(go env GOPATH)/bin"
+      shell: bash
+    - name: Check out code
+      uses: actions/checkout@v2
+    - name: go mod tidy
+      run: |
+        go mod tidy
+        git diff --exit-code -- go.mod go.sum
+
+  lint:
+    name: lint
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v2
+    - name: Lint
+      uses: golangci/golangci-lint-action@v1
+      with:
+        version: v1.26
+        args: >-
+          -E gofmt
+          -E golint
+          -E govet
+          -E gosec
+          -E unused
+          -E gosimple
+          -E structcheck
+          -E varcheck
+          -E ineffassign
+          -E deadcode
+          -E typecheck
+          -E misspell
+          -E whitespace
+          -E errcheck
+          --exclude '(comment on exported (method|function|type|const|var)|should have( a package)? comment|comment should be of the form)'
+          --timeout 5m
+          ./...
