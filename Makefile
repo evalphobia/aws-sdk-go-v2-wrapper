@@ -19,6 +19,12 @@ LINT_OPT := -E gofmt \
             --timeout 5m
 
 
+help:
+	@echo 'init - initialize project'
+	@echo 'lint - execute lint'
+	@echo 'test-coverage - execute test and generate coverage file'
+	@echo 'send-coverage - send coverage to Coveralls'
+
 init:
 	go mod download
 
