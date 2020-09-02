@@ -58,10 +58,10 @@ func NewGetObjectTaggingResult(output *SDK.GetObjectTaggingResponse) *GetObjectT
 		return r
 	}
 
+	r.TagSet = newTags(output.TagSet)
+
 	if output.VersionId != nil {
 		r.VersionID = *output.VersionId
 	}
-
-	r.TagSet = newTags(output.TagSet)
 	return r
 }

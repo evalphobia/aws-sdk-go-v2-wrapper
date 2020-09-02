@@ -42,9 +42,9 @@ func (r GetObjectRetentionRequest) ToInput() *SDK.GetObjectRetentionInput {
 	if r.Key != "" {
 		in.Key = pointers.String(r.Key)
 	}
-	if r.RequestPayer != "" {
-		in.RequestPayer = SDK.RequestPayer(r.RequestPayer)
-	}
+
+	in.RequestPayer = SDK.RequestPayer(r.RequestPayer)
+
 	if r.VersionID != "" {
 		in.VersionId = pointers.String(r.VersionID)
 	}
@@ -68,11 +68,11 @@ func NewGetObjectRetentionResult(output *SDK.GetObjectRetentionResponse) *GetObj
 		return r
 	}
 
-	if rr.RetainUntilDate != nil {
-		r.RetainUntilDate = *rr.RetainUntilDate
-	}
 	if rr.Mode != "" {
 		r.Mode = ObjectLockRetentionMode(rr.Mode)
+	}
+	if rr.RetainUntilDate != nil {
+		r.RetainUntilDate = *rr.RetainUntilDate
 	}
 	return r
 }

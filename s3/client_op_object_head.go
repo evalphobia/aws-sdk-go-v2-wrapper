@@ -58,6 +58,7 @@ func (r HeadObjectRequest) ToInput() *SDK.HeadObjectInput {
 	if r.Key != "" {
 		in.Key = pointers.String(r.Key)
 	}
+
 	if r.IfMatch != "" {
 		in.IfMatch = pointers.String(r.IfMatch)
 	}
@@ -76,9 +77,9 @@ func (r HeadObjectRequest) ToInput() *SDK.HeadObjectInput {
 	if r.Range != "" {
 		in.Range = pointers.String(r.Range)
 	}
-	if r.RequestPayer != "" {
-		in.RequestPayer = SDK.RequestPayer(r.RequestPayer)
-	}
+
+	in.RequestPayer = SDK.RequestPayer(r.RequestPayer)
+
 	if r.SSECustomerAlgorithm != "" {
 		in.SSECustomerAlgorithm = pointers.String(r.SSECustomerAlgorithm)
 	}
@@ -172,11 +173,26 @@ func NewHeadObjectResult(output *SDK.HeadObjectResponse) *HeadObjectResult {
 	if output.LastModified != nil {
 		r.LastModified = *output.LastModified
 	}
+
+	r.Metadata = output.Metadata
+
 	if output.MissingMeta != nil {
 		r.MissingMeta = *output.MissingMeta
 	}
+	if r.ObjectLockLegalHoldStatus != "" {
+		r.ObjectLockLegalHoldStatus = ObjectLockLegalHoldStatus(output.ObjectLockLegalHoldStatus)
+	}
+	if r.ObjectLockMode != "" {
+		r.ObjectLockMode = ObjectLockMode(output.ObjectLockMode)
+	}
 	if output.PartsCount != nil {
 		r.PartsCount = *output.PartsCount
+	}
+	if r.ReplicationStatus != "" {
+		r.ReplicationStatus = ReplicationStatus(output.ReplicationStatus)
+	}
+	if r.RequestCharged != "" {
+		r.RequestCharged = RequestCharged(output.RequestCharged)
 	}
 	if output.Restore != nil {
 		r.Restore = *output.Restore
@@ -190,32 +206,17 @@ func NewHeadObjectResult(output *SDK.HeadObjectResponse) *HeadObjectResult {
 	if output.SSEKMSKeyId != nil {
 		r.SSEKMSKeyID = *output.SSEKMSKeyId
 	}
-	if output.VersionId != nil {
-		r.VersionID = *output.VersionId
-	}
-	if output.WebsiteRedirectLocation != nil {
-		r.WebsiteRedirectLocation = *output.WebsiteRedirectLocation
-	}
-
-	if r.ObjectLockLegalHoldStatus != "" {
-		r.ObjectLockLegalHoldStatus = ObjectLockLegalHoldStatus(output.ObjectLockLegalHoldStatus)
-	}
-	if r.ObjectLockMode != "" {
-		r.ObjectLockMode = ObjectLockMode(output.ObjectLockMode)
-	}
-	if r.ReplicationStatus != "" {
-		r.ReplicationStatus = ReplicationStatus(output.ReplicationStatus)
-	}
-	if r.RequestCharged != "" {
-		r.RequestCharged = RequestCharged(output.RequestCharged)
-	}
 	if r.ServerSideEncryption != "" {
 		r.ServerSideEncryption = ServerSideEncryption(output.ServerSideEncryption)
 	}
 	if r.StorageClass != "" {
 		r.StorageClass = StorageClass(output.StorageClass)
 	}
-	r.Metadata = output.Metadata
-
+	if output.VersionId != nil {
+		r.VersionID = *output.VersionId
+	}
+	if output.WebsiteRedirectLocation != nil {
+		r.WebsiteRedirectLocation = *output.WebsiteRedirectLocation
+	}
 	return r
 }

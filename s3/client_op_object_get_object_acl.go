@@ -41,9 +41,9 @@ func (r GetObjectACLRequest) ToInput() *SDK.GetObjectAclInput {
 	if r.Key != "" {
 		in.Key = pointers.String(r.Key)
 	}
-	if r.RequestPayer != "" {
-		in.RequestPayer = SDK.RequestPayer(r.RequestPayer)
-	}
+
+	in.RequestPayer = SDK.RequestPayer(r.RequestPayer)
+
 	if r.VersionID != "" {
 		in.VersionId = pointers.String(r.VersionID)
 	}
@@ -63,11 +63,11 @@ func NewGetObjectACLResult(output *SDK.GetObjectAclResponse) *GetObjectACLResult
 		return r
 	}
 
+	r.Grants = newGrants(output.Grants)
+	r.Owner = newOwner(output.Owner)
+
 	if r.RequestCharged != "" {
 		r.RequestCharged = RequestCharged(output.RequestCharged)
 	}
-
-	r.Grants = newGrants(output.Grants)
-	r.Owner = newOwner(output.Owner)
 	return r
 }

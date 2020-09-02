@@ -190,6 +190,40 @@ func (v ObjectLockRetentionMode) IsCompliance() bool {
 	return v == ObjectLockRetentionModeCompliance
 }
 
+type ObjectStorageClass string
+
+const (
+	ObjectStorageClassStandard           ObjectStorageClass = ObjectStorageClass(SDK.ObjectStorageClassStandard)
+	ObjectStorageClassReducedRedundancy  ObjectStorageClass = ObjectStorageClass(SDK.ObjectStorageClassReducedRedundancy)
+	ObjectStorageClassGlacier            ObjectStorageClass = ObjectStorageClass(SDK.ObjectStorageClassGlacier)
+	ObjectStorageClassStandardIa         ObjectStorageClass = ObjectStorageClass(SDK.ObjectStorageClassStandardIa)
+	ObjectStorageClassOnezoneIa          ObjectStorageClass = ObjectStorageClass(SDK.ObjectStorageClassOnezoneIa)
+	ObjectStorageClassIntelligentTiering ObjectStorageClass = ObjectStorageClass(SDK.ObjectStorageClassIntelligentTiering)
+	ObjectStorageClassDeepArchive        ObjectStorageClass = ObjectStorageClass(SDK.ObjectStorageClassDeepArchive)
+)
+
+func (v ObjectStorageClass) IsStandard() bool {
+	return v == ObjectStorageClassStandard
+}
+func (v ObjectStorageClass) IsReducedRedundancy() bool {
+	return v == ObjectStorageClassReducedRedundancy
+}
+func (v ObjectStorageClass) IsGlacier() bool {
+	return v == ObjectStorageClassGlacier
+}
+func (v ObjectStorageClass) IsStandardIa() bool {
+	return v == ObjectStorageClassStandardIa
+}
+func (v ObjectStorageClass) IsOnezoneIa() bool {
+	return v == ObjectStorageClassOnezoneIa
+}
+func (v ObjectStorageClass) IsIntelligentTiering() bool {
+	return v == ObjectStorageClassIntelligentTiering
+}
+func (v ObjectStorageClass) IsDeepArchive() bool {
+	return v == ObjectStorageClassDeepArchive
+}
+
 type ObjectVersionStorageClass string
 
 const (

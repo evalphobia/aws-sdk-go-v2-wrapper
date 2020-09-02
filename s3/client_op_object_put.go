@@ -72,6 +72,15 @@ func (r PutObjectRequest) ToInput() *SDK.PutObjectInput {
 		in.Key = pointers.String(r.Key)
 	}
 
+	in.ACL = SDK.ObjectCannedACL(r.ACL)
+
+	switch {
+	case r.Body != nil:
+		in.Body = r.Body
+	case len(r.BodyBytes) != 0:
+		in.Body = bytes.NewReader(r.BodyBytes)
+	}
+
 	if r.CacheControl != "" {
 		in.CacheControl = pointers.String(r.CacheControl)
 	}
@@ -108,9 +117,17 @@ func (r PutObjectRequest) ToInput() *SDK.PutObjectInput {
 	if r.GrantWriteACP != "" {
 		in.GrantWriteACP = pointers.String(r.GrantWriteACP)
 	}
+
+	in.Metadata = r.Metadata
+	in.ObjectLockLegalHoldStatus = SDK.ObjectLockLegalHoldStatus(r.ObjectLockLegalHoldStatus)
+	in.ObjectLockMode = SDK.ObjectLockMode(r.ObjectLockMode)
+
 	if !r.ObjectLockRetainUntilDate.IsZero() {
 		in.ObjectLockRetainUntilDate = &r.ObjectLockRetainUntilDate
 	}
+
+	in.RequestPayer = SDK.RequestPayer(r.RequestPayer)
+
 	if r.SSECustomerAlgorithm != "" {
 		in.SSECustomerAlgorithm = pointers.String(r.SSECustomerAlgorithm)
 	}
@@ -126,41 +143,16 @@ func (r PutObjectRequest) ToInput() *SDK.PutObjectInput {
 	if r.SSEKMSKeyID != "" {
 		in.SSEKMSKeyId = pointers.String(r.SSEKMSKeyID)
 	}
+
+	in.ServerSideEncryption = SDK.ServerSideEncryption(r.ServerSideEncryption)
+	in.StorageClass = SDK.StorageClass(r.StorageClass)
+
 	if r.Tagging != "" {
 		in.Tagging = pointers.String(r.Tagging)
 	}
 	if r.WebsiteRedirectLocation != "" {
 		in.WebsiteRedirectLocation = pointers.String(r.WebsiteRedirectLocation)
 	}
-
-	if r.ACL != "" {
-		in.ACL = SDK.ObjectCannedACL(r.ACL)
-	}
-	if r.ObjectLockLegalHoldStatus != "" {
-		in.ObjectLockLegalHoldStatus = SDK.ObjectLockLegalHoldStatus(r.ObjectLockLegalHoldStatus)
-	}
-	if r.ObjectLockMode != "" {
-		in.ObjectLockMode = SDK.ObjectLockMode(r.ObjectLockMode)
-	}
-	if r.RequestPayer != "" {
-		in.RequestPayer = SDK.RequestPayer(r.RequestPayer)
-	}
-	if r.ServerSideEncryption != "" {
-		in.ServerSideEncryption = SDK.ServerSideEncryption(r.ServerSideEncryption)
-	}
-	if r.StorageClass != "" {
-		in.StorageClass = SDK.StorageClass(r.StorageClass)
-	}
-
-	in.Metadata = r.Metadata
-
-	switch {
-	case r.Body != nil:
-		in.Body = r.Body
-	case len(r.BodyBytes) != 0:
-		in.Body = bytes.NewReader(r.BodyBytes)
-	}
-
 	return in
 }
 
@@ -189,6 +181,9 @@ func NewPutObjectResult(output *SDK.PutObjectResponse) *PutObjectResult {
 	if output.Expiration != nil {
 		r.Expiration = *output.Expiration
 	}
+	if output.RequestCharged != "" {
+		r.RequestCharged = RequestCharged(output.RequestCharged)
+	}
 	if output.SSECustomerAlgorithm != nil {
 		r.SSECustomerAlgorithm = *output.SSECustomerAlgorithm
 	}
@@ -201,15 +196,11 @@ func NewPutObjectResult(output *SDK.PutObjectResponse) *PutObjectResult {
 	if output.SSEKMSKeyId != nil {
 		r.SSEKMSKeyID = *output.SSEKMSKeyId
 	}
-	if output.VersionId != nil {
-		r.VersionID = *output.VersionId
-	}
-
-	if output.RequestCharged != "" {
-		r.RequestCharged = RequestCharged(output.RequestCharged)
-	}
 	if output.ServerSideEncryption != "" {
 		r.ServerSideEncryption = ServerSideEncryption(output.ServerSideEncryption)
+	}
+	if output.VersionId != nil {
+		r.VersionID = *output.VersionId
 	}
 	return r
 }

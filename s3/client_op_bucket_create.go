@@ -43,6 +43,15 @@ func (r CreateBucketRequest) ToInput() *SDK.CreateBucketInput {
 	if r.Bucket != "" {
 		in.Bucket = pointers.String(r.Bucket)
 	}
+
+	in.ACL = SDK.BucketCannedACL(r.ACL)
+
+	if r.LocationConstraint != "" {
+		in.CreateBucketConfiguration = &SDK.CreateBucketConfiguration{
+			LocationConstraint: SDK.BucketLocationConstraint(r.LocationConstraint),
+		}
+	}
+
 	if r.GrantFullControl != "" {
 		in.GrantFullControl = pointers.String(r.GrantFullControl)
 	}
@@ -60,15 +69,6 @@ func (r CreateBucketRequest) ToInput() *SDK.CreateBucketInput {
 	}
 	if r.ObjectLockEnabledForBucket {
 		in.ObjectLockEnabledForBucket = pointers.Bool(r.ObjectLockEnabledForBucket)
-	}
-
-	if r.ACL != "" {
-		in.ACL = SDK.BucketCannedACL(r.ACL)
-	}
-	if r.LocationConstraint != "" {
-		in.CreateBucketConfiguration = &SDK.CreateBucketConfiguration{
-			LocationConstraint: SDK.BucketLocationConstraint(r.LocationConstraint),
-		}
 	}
 	return in
 }

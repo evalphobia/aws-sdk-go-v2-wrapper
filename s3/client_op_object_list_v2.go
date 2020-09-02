@@ -49,9 +49,9 @@ func (r ListObjectsRequest) ToInput() *SDK.ListObjectsV2Input {
 	if r.Delimiter != "" {
 		in.Delimiter = pointers.String(r.Delimiter)
 	}
-	if r.EncodingType != "" {
-		in.EncodingType = SDK.EncodingType(r.EncodingType)
-	}
+
+	in.EncodingType = SDK.EncodingType(r.EncodingType)
+
 	if r.FetchOwner {
 		in.FetchOwner = pointers.Bool(r.FetchOwner)
 	}
@@ -61,9 +61,9 @@ func (r ListObjectsRequest) ToInput() *SDK.ListObjectsV2Input {
 	if r.Prefix != "" {
 		in.Prefix = pointers.String(r.Prefix)
 	}
-	if r.RequestPayer != "" {
-		in.RequestPayer = SDK.RequestPayer(r.RequestPayer)
-	}
+
+	in.RequestPayer = SDK.RequestPayer(r.RequestPayer)
+
 	if r.StartAfter != "" {
 		in.StartAfter = pointers.String(r.StartAfter)
 	}
@@ -90,6 +90,16 @@ func NewListObjectsResultV2(output *SDK.ListObjectsV2Response) *ListObjectsResul
 	r := &ListObjectsResult{}
 	if output == nil {
 		return r
+	}
+
+	r.CommonPrefixes = newCommonPrefixes(output.CommonPrefixes)
+
+	if len(output.Contents) != 0 {
+		list := make([]Object, len(output.Contents))
+		for i, v := range output.Contents {
+			list[i] = NewObject(v)
+		}
+		r.Contents = list
 	}
 
 	if output.ContinuationToken != nil {
@@ -122,15 +132,5 @@ func NewListObjectsResultV2(output *SDK.ListObjectsV2Response) *ListObjectsResul
 	if output.StartAfter != nil {
 		r.StartAfter = *output.StartAfter
 	}
-
-	if len(output.Contents) != 0 {
-		list := make([]Object, len(output.Contents))
-		for i, v := range output.Contents {
-			list[i] = NewObject(v)
-		}
-		r.Contents = list
-	}
-
-	r.CommonPrefixes = newCommonPrefixes(output.CommonPrefixes)
 	return r
 }
