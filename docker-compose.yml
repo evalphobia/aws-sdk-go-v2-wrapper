@@ -1,5 +1,10 @@
 version: '3'
 services:
+  dynamodb:
+    image: fingershock/dynamodb-local
+    command: -dbPath /dynamodb_data -sharedDb
+    ports:
+      - "8000:8000"
   s3:
     image: evalphobia/fake-s3:1.0.0
     volumes:
