@@ -19,20 +19,20 @@ func TestClientAPIObject(t *testing.T) {
 	_, err := svc.DeleteObjectFromPath(ctx, testPutBucketName, path)
 	is.NoErr(err)
 
-	ok, err := svc.IsExistObject(ctx, testPutBucketName, path)
+	ok, err := svc.ExistObject(ctx, testPutBucketName, path)
 	is.NoErr(err)
 	is.Equal(ok, false)
 
 	resGet, err := svc.GetObjectFromPath(ctx, testPutBucketName, path)
 	is.NoErr(err)
-	is.Equal(resGet.IsExist, false)
+	is.Equal(resGet.Exists, false)
 
 	// check existed object
 	resPut, err := svc.PutObjectToPath(ctx, testPutBucketName, path, []byte("001"))
 	is.NoErr(err)
 	is.True(resPut.ETag != "") // ETag must be set
 
-	ok, err = svc.IsExistObject(ctx, testPutBucketName, path)
+	ok, err = svc.ExistObject(ctx, testPutBucketName, path)
 	is.NoErr(err)
 	is.True(ok)
 
@@ -59,13 +59,13 @@ func TestClientAPIObject(t *testing.T) {
 	_, err = svc.DeleteObjectFromPath(ctx, testPutBucketName, path)
 	is.NoErr(err)
 
-	ok, err = svc.IsExistObject(ctx, testPutBucketName, path)
+	ok, err = svc.ExistObject(ctx, testPutBucketName, path)
 	is.NoErr(err)
 	is.Equal(ok, false)
 
 	resGet, err = svc.GetObjectFromPath(ctx, testPutBucketName, path)
 	is.NoErr(err)
-	is.Equal(resGet.IsExist, false)
+	is.Equal(resGet.Exists, false)
 
 	_, err = svc.DeleteObjectFromPath(ctx, testPutBucketName, path)
 	is.NoErr(err)

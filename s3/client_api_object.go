@@ -5,8 +5,8 @@ import (
 	"time"
 )
 
-// IsExistObject checks if the object exists or not.
-func (svc *S3) IsExistObject(ctx context.Context, bucket, path string) (bool, error) {
+// ExistObject checks if the object exists or not.
+func (svc *S3) ExistObject(ctx context.Context, bucket, path string) (bool, error) {
 	res, err := svc.HeadObject(ctx, HeadObjectRequest{
 		Bucket: bucket,
 		Key:    path,
@@ -14,7 +14,7 @@ func (svc *S3) IsExistObject(ctx context.Context, bucket, path string) (bool, er
 	if err != nil {
 		return false, err
 	}
-	return res.IsExist, nil
+	return res.Exists, nil
 }
 
 // GetObjectFromPath gets an object from `path`.

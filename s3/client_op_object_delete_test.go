@@ -20,7 +20,7 @@ func TestDeleteObject(t *testing.T) {
 	})
 	is.NoErr(err)
 
-	ok, err := svc.IsExistObject(ctx, testPutBucketName, "TestDeleteObject/test-file-01")
+	ok, err := svc.ExistObject(ctx, testPutBucketName, "TestDeleteObject/test-file-01")
 	is.NoErr(err)
 	is.True(ok)
 
@@ -31,7 +31,7 @@ func TestDeleteObject(t *testing.T) {
 	})
 	is.NoErr(err)
 
-	ok, err = svc.IsExistObject(ctx, testPutBucketName, "TestDeleteObject/test-file-01")
+	ok, err = svc.ExistObject(ctx, testPutBucketName, "TestDeleteObject/test-file-01")
 	is.NoErr(err)
 	is.True(!ok)
 

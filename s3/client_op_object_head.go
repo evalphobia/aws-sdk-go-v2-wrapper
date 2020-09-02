@@ -97,7 +97,7 @@ func (r HeadObjectRequest) ToInput() *SDK.HeadObjectInput {
 
 // HeadObjectResult contains results from `HeadObject` operation.
 type HeadObjectResult struct {
-	IsExist bool
+	Exists bool
 
 	AcceptRanges              string
 	CacheControl              string
@@ -135,7 +135,7 @@ func NewHeadObjectResult(output *SDK.HeadObjectResponse) *HeadObjectResult {
 		return r
 	}
 
-	r.IsExist = true
+	r.Exists = true
 
 	if output.AcceptRanges != nil {
 		r.AcceptRanges = *output.AcceptRanges

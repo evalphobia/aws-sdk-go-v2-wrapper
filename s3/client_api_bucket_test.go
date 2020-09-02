@@ -33,15 +33,15 @@ func TestClientAPIBucket(t *testing.T) {
 		err = svc.DeleteBucketFromName(ctx, testPutBucketName)
 		is.True(err != nil) // already deleted bucket
 	})
-	t.Run("IsExistBucket", func(t *testing.T) {
+	t.Run("ExistBucket", func(t *testing.T) {
 		_ = svc.DeleteBucketFromName(ctx, testPutBucketName)
 
-		ok, err := svc.IsExistBucket(ctx, testPutBucketName)
+		ok, err := svc.ExistBucket(ctx, testPutBucketName)
 		is.True(!ok)
 		is.NoErr(err)
 
 		_, _ = svc.CreateBucketFromName(ctx, testPutBucketName)
-		ok, err = svc.IsExistBucket(ctx, testPutBucketName)
+		ok, err = svc.ExistBucket(ctx, testPutBucketName)
 		is.True(ok)
 		is.NoErr(err)
 	})
