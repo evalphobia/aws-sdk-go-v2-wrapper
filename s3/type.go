@@ -19,9 +19,6 @@ func (r AccessControlPolicy) ToSDK() *SDK.AccessControlPolicy {
 
 	o := &SDK.AccessControlPolicy{}
 
-	v := r.Owner.ToSDK()
-	o.Owner = &v
-
 	if len(r.Grants) != 0 {
 		list := make([]SDK.Grant, len(r.Grants))
 		for i, v := range r.Grants {
@@ -30,6 +27,8 @@ func (r AccessControlPolicy) ToSDK() *SDK.AccessControlPolicy {
 		o.Grants = list
 	}
 
+	v := r.Owner.ToSDK()
+	o.Owner = &v
 	return o
 }
 
@@ -67,30 +66,9 @@ type Delete struct {
 	Quiet   bool
 }
 
-// func newDelete(o *SDK.Delete) Delete {
-// 	result := Delete{}
-// 	if o == nil {
-// 		return result
-// 	}
-
-// 	if o.Quiet != nil {
-// 		result.Quiet = *o.Quiet
-// 	}
-// 	if len(o.Objects) != 0 {
-// 		list := make([]ObjectIdentifier, len(o.Objects))
-// 		for i, v := range o.Objects {
-// 			list[i] = newObjectIdentifier(v)
-// 		}
-// 	}
-// 	return result
-// }
-
 func (r Delete) ToSDK() SDK.Delete {
 	o := SDK.Delete{}
 
-	if r.Quiet {
-		o.Quiet = pointers.Bool(r.Quiet)
-	}
 	if len(r.Objects) != 0 {
 		list := make([]SDK.ObjectIdentifier, len(r.Objects))
 		for i, v := range r.Objects {
@@ -99,6 +77,9 @@ func (r Delete) ToSDK() SDK.Delete {
 		o.Objects = list
 	}
 
+	if r.Quiet {
+		o.Quiet = pointers.Bool(r.Quiet)
+	}
 	return o
 }
 
@@ -171,11 +152,12 @@ func newDeleteMarkerEntry(o SDK.DeleteMarkerEntry) DeleteMarkerEntry {
 	if o.LastModified != nil {
 		result.LastModified = *o.LastModified
 	}
+
+	result.Owner = newOwner(o.Owner)
+
 	if o.VersionId != nil {
 		result.VersionID = *o.VersionId
 	}
-
-	result.Owner = newOwner(o.Owner)
 	return result
 }
 
@@ -275,12 +257,10 @@ func (r Grant) ToSDK() SDK.Grant {
 	if r.GranteeID != "" {
 		g.ID = pointers.String(r.GranteeID)
 	}
-	if r.GranteeType != "" {
-		g.Type = SDK.Type(r.GranteeType)
-	}
 	if r.GranteeURI != "" {
 		g.URI = pointers.String(r.GranteeURI)
 	}
+	g.Type = SDK.Type(r.GranteeType)
 
 	o.Permission = SDK.Permission(r.Permission)
 	return o
@@ -314,15 +294,23 @@ func newLifecycleRules(list []SDK.LifecycleRule) []LifecycleRule {
 func newLifecycleRule(o SDK.LifecycleRule) LifecycleRule {
 	result := LifecycleRule{}
 
+	result.Expiration = newLifecycleExpiration(o.Expiration)
+
 	if o.Filter != nil {
 		result.Filter = newLifecycleRuleFilter(o.Filter)
 	}
 	if o.ID != nil {
 		result.ID = *o.ID
 	}
+
+	result.NoncurrentVersionTransitions = newNoncurrentVersionTransitions(o.NoncurrentVersionTransitions)
+
 	if o.Prefix != nil {
 		result.Prefix = *o.Prefix
 	}
+
+	result.Status = ExpirationStatus(o.Status)
+	result.Transitions = newTransitions(o.Transitions)
 
 	if v := o.AbortIncompleteMultipartUpload; v != nil {
 		if v.DaysAfterInitiation != nil {
@@ -334,11 +322,6 @@ func newLifecycleRule(o SDK.LifecycleRule) LifecycleRule {
 			result.NoncurrentVersionExpirationDays = *v.NoncurrentDays
 		}
 	}
-
-	result.Expiration = newLifecycleExpiration(o.Expiration)
-	result.NoncurrentVersionTransitions = newNoncurrentVersionTransitions(o.NoncurrentVersionTransitions)
-	result.Status = ExpirationStatus(o.Status)
-	result.Transitions = newTransitions(o.Transitions)
 	return result
 }
 
@@ -351,9 +334,9 @@ func (r LifecycleRule) ToSDK() SDK.LifecycleRule {
 	if r.Prefix != "" {
 		o.Prefix = pointers.String(r.Prefix)
 	}
-	if r.Status != "" {
-		o.Status = SDK.ExpirationStatus(r.Status)
-	}
+
+	o.Status = SDK.ExpirationStatus(r.Status)
+
 	if r.AbortIncompleteMultipartUploadDaysAfterInitiation != 0 {
 		o.AbortIncompleteMultipartUpload = &SDK.AbortIncompleteMultipartUpload{
 			DaysAfterInitiation: pointers.Long64(r.AbortIncompleteMultipartUploadDaysAfterInitiation),
@@ -538,9 +521,8 @@ func (r NoncurrentVersionTransition) ToSDK() SDK.NoncurrentVersionTransition {
 	if r.NoncurrentDays != 0 {
 		o.NoncurrentDays = pointers.Long64(r.NoncurrentDays)
 	}
-	if r.StorageClass != "" {
-		o.StorageClass = SDK.TransitionStorageClass(r.StorageClass)
-	}
+
+	o.StorageClass = SDK.TransitionStorageClass(r.StorageClass)
 	return o
 }
 
@@ -549,7 +531,7 @@ type Object struct {
 	Key              string
 	LastModified     time.Time
 	Size             int64
-	StorageClass     string
+	StorageClass     ObjectStorageClass
 	OwnerID          string
 	OwnerDisplayName string
 }
@@ -563,12 +545,15 @@ func NewObject(o SDK.Object) Object {
 	if o.Key != nil {
 		result.Key = *o.Key
 	}
-	if o.Size != nil {
-		result.Size = *o.Size
-	}
 	if o.LastModified != nil {
 		result.LastModified = *o.LastModified
 	}
+	if o.Size != nil {
+		result.Size = *o.Size
+	}
+
+	result.StorageClass = ObjectStorageClass(o.StorageClass)
+
 	if o.Owner != nil {
 		owner := o.Owner
 		if owner.ID != nil {
@@ -585,18 +570,6 @@ type ObjectIdentifier struct {
 	Key       string
 	VersionID string
 }
-
-// func newObjectIdentifier(o SDK.ObjectIdentifier) ObjectIdentifier {
-// 	result := ObjectIdentifier{}
-
-// 	if o.Key != nil {
-// 		result.Key = *o.Key
-// 	}
-// 	if o.VersionId != nil {
-// 		result.VersionID = *o.VersionId
-// 	}
-// 	return result
-// }
 
 func (r ObjectIdentifier) ToSDK() SDK.ObjectIdentifier {
 	o := SDK.ObjectIdentifier{}
@@ -648,18 +621,18 @@ func newObjectVersion(o SDK.ObjectVersion) ObjectVersion {
 	if o.LastModified != nil {
 		result.LastModified = *o.LastModified
 	}
+
+	result.Owner = newOwner(o.Owner)
+
 	if o.Size != nil {
 		result.Size = *o.Size
 	}
+
+	result.StorageClass = ObjectVersionStorageClass(o.StorageClass)
+
 	if o.VersionId != nil {
 		result.VersionID = *o.VersionId
 	}
-
-	if o.StorageClass != "" {
-		result.StorageClass = ObjectVersionStorageClass(o.StorageClass)
-	}
-
-	result.Owner = newOwner(o.Owner)
 	return result
 }
 
@@ -779,8 +752,7 @@ func (r Transition) ToSDK() SDK.Transition {
 	if r.Days != 0 {
 		o.Days = pointers.Long64(r.Days)
 	}
-	if r.StorageClass != "" {
-		o.StorageClass = SDK.TransitionStorageClass(r.StorageClass)
-	}
+
+	o.StorageClass = SDK.TransitionStorageClass(r.StorageClass)
 	return o
 }

@@ -48,9 +48,8 @@ func (r DeleteObjectsRequest) ToInput() *SDK.DeleteObjectsInput {
 	if r.MFA != "" {
 		in.MFA = pointers.String(r.MFA)
 	}
-	if r.RequestPayer != "" {
-		in.RequestPayer = SDK.RequestPayer(r.RequestPayer)
-	}
+
+	in.RequestPayer = SDK.RequestPayer(r.RequestPayer)
 	return in
 }
 
@@ -67,11 +66,11 @@ func NewDeleteObjectsResult(output *SDK.DeleteObjectsResponse) *DeleteObjectsRes
 		return r
 	}
 
+	r.Deleted = newDeletedObjects(output.Deleted)
+	r.Errors = newErrors(output.Errors)
+
 	if output.RequestCharged != "" {
 		r.RequestCharged = RequestCharged(output.RequestCharged)
 	}
-
-	r.Deleted = newDeletedObjects(output.Deleted)
-	r.Errors = newErrors(output.Errors)
 	return r
 }

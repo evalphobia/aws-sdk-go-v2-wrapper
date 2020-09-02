@@ -41,9 +41,6 @@ func (r PutObjectTaggingRequest) ToInput() *SDK.PutObjectTaggingInput {
 	if r.Key != "" {
 		in.Key = pointers.String(r.Key)
 	}
-	if r.VersionID != "" {
-		in.VersionId = pointers.String(r.VersionID)
-	}
 
 	if len(r.TaggingTagSet) != 0 {
 		list := make([]SDK.Tag, len(r.TaggingTagSet))
@@ -53,6 +50,10 @@ func (r PutObjectTaggingRequest) ToInput() *SDK.PutObjectTaggingInput {
 		in.Tagging = &SDK.Tagging{
 			TagSet: list,
 		}
+	}
+
+	if r.VersionID != "" {
+		in.VersionId = pointers.String(r.VersionID)
 	}
 	return in
 }

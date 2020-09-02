@@ -48,6 +48,10 @@ func (r PutObjectACLRequest) ToInput() *SDK.PutObjectAclInput {
 	if r.Key != "" {
 		in.Key = pointers.String(r.Key)
 	}
+
+	in.ACL = SDK.ObjectCannedACL(r.ACL)
+	in.AccessControlPolicy = r.AccessControlPolicy.ToSDK()
+
 	if r.GrantFullControl != "" {
 		in.GrantFullControl = pointers.String(r.GrantFullControl)
 	}
@@ -63,17 +67,12 @@ func (r PutObjectACLRequest) ToInput() *SDK.PutObjectAclInput {
 	if r.GrantWriteACP != "" {
 		in.GrantWriteACP = pointers.String(r.GrantWriteACP)
 	}
+
+	in.RequestPayer = SDK.RequestPayer(r.RequestPayer)
+
 	if r.VersionID != "" {
 		in.VersionId = pointers.String(r.VersionID)
 	}
-
-	if r.ACL != "" {
-		in.ACL = SDK.ObjectCannedACL(r.ACL)
-	}
-	if r.RequestPayer != "" {
-		in.RequestPayer = SDK.RequestPayer(r.RequestPayer)
-	}
-	in.AccessControlPolicy = r.AccessControlPolicy.ToSDK()
 	return in
 }
 

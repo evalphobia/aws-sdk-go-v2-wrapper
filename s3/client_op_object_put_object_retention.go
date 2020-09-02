@@ -46,27 +46,25 @@ func (r PutObjectRetentionRequest) ToInput() *SDK.PutObjectRetentionInput {
 	if r.Key != "" {
 		in.Key = pointers.String(r.Key)
 	}
+
 	if r.BypassGovernanceRetention {
 		in.BypassGovernanceRetention = pointers.Bool(r.BypassGovernanceRetention)
 	}
+
+	in.RequestPayer = SDK.RequestPayer(r.RequestPayer)
+
 	if r.VersionID != "" {
 		in.VersionId = pointers.String(r.VersionID)
-	}
-
-	if r.RequestPayer != "" {
-		in.RequestPayer = SDK.RequestPayer(r.RequestPayer)
 	}
 
 	switch {
 	case r.ObjectLockRetentionMode != "",
 		!r.ObjectLockRetainUntilDate.IsZero():
 		v := &SDK.ObjectLockRetention{}
-		if r.ObjectLockRetentionMode != "" {
-			v.Mode = SDK.ObjectLockRetentionMode(r.ObjectLockRetentionMode)
-		}
 		if !r.ObjectLockRetainUntilDate.IsZero() {
 			v.RetainUntilDate = &r.ObjectLockRetainUntilDate
 		}
+		v.Mode = SDK.ObjectLockRetentionMode(r.ObjectLockRetentionMode)
 		in.Retention = v
 	}
 

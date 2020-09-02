@@ -41,9 +41,13 @@ func (r ListObjectVersionsRequest) ToInput() *SDK.ListObjectVersionsInput {
 	if r.Bucket != "" {
 		in.Bucket = pointers.String(r.Bucket)
 	}
+
 	if r.Delimiter != "" {
 		in.Delimiter = pointers.String(r.Delimiter)
 	}
+
+	in.EncodingType = SDK.EncodingType(r.EncodingType)
+
 	if r.KeyMarker != "" {
 		in.KeyMarker = pointers.String(r.KeyMarker)
 	}
@@ -55,10 +59,6 @@ func (r ListObjectVersionsRequest) ToInput() *SDK.ListObjectVersionsInput {
 	}
 	if r.VersionIDMarker != "" {
 		in.VersionIdMarker = pointers.String(r.VersionIDMarker)
-	}
-
-	if r.EncodingType != "" {
-		in.EncodingType = SDK.EncodingType(r.EncodingType)
 	}
 	return in
 }
@@ -85,6 +85,9 @@ func NewListObjectVersionsResult(output *SDK.ListObjectVersionsResponse) *ListOb
 	if output == nil {
 		return r
 	}
+
+	r.CommonPrefixes = newCommonPrefixes(output.CommonPrefixes)
+	r.DeleteMarkers = newDeleteMarkerEntries(output.DeleteMarkers)
 
 	if output.Delimiter != nil {
 		r.Delimiter = *output.Delimiter
@@ -113,13 +116,10 @@ func NewListObjectVersionsResult(output *SDK.ListObjectVersionsResponse) *ListOb
 	if output.VersionIdMarker != nil {
 		r.VersionIDMarker = *output.VersionIdMarker
 	}
-
 	if output.EncodingType != "" {
 		r.EncodingType = EncodingType(output.EncodingType)
 	}
 
-	r.DeleteMarkers = newDeleteMarkerEntries(output.DeleteMarkers)
-	r.CommonPrefixes = newCommonPrefixes(output.CommonPrefixes)
 	r.Versions = newObjectVersions(output.Versions)
 	return r
 }

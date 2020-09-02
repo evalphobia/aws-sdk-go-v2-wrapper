@@ -34,7 +34,7 @@ func NewListBucketsResult(output *SDK.ListBucketsResponse) *ListBucketsResult {
 		return r
 	}
 
-	r.Owner = newOwner(output.Owner)
 	r.Buckets = newBuckets(output.Buckets)
+	r.Owner = newOwner(output.Owner)
 	return r
 }

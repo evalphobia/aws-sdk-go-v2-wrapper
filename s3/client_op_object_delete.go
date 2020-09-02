@@ -50,9 +50,9 @@ func (r DeleteObjectRequest) ToInput() *SDK.DeleteObjectInput {
 	if r.MFA != "" {
 		in.MFA = pointers.String(r.MFA)
 	}
-	if r.RequestPayer != "" {
-		in.RequestPayer = SDK.RequestPayer(r.RequestPayer)
-	}
+
+	in.RequestPayer = SDK.RequestPayer(r.RequestPayer)
+
 	if r.VersionID != "" {
 		in.VersionId = pointers.String(r.VersionID)
 	}
