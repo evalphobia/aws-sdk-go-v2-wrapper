@@ -96,7 +96,7 @@ func (svc *DynamoDB) ForceDeleteAll(ctx context.Context, tableName string) error
 		}
 
 		const maxDeleteItems = 25
-		itemChunks := sliceItemsToChunks(result.Items, 25)
+		itemChunks := sliceItemsToChunks(result.Items, maxDeleteItems)
 		for _, items := range itemChunks {
 			writeReq := make([]WriteRequest, len(items))
 			for i, v := range items {

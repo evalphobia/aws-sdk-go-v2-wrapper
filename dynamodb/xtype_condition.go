@@ -192,12 +192,3 @@ func (x XCondition) Condition() (expression.ConditionBuilder, error) {
 		return e.Equal(expression.Value(x.Value)), nil
 	}
 }
-
-func (x XCondition) hasValue() bool {
-	switch {
-	case x.Name != "",
-		x.Value != "":
-		return true
-	}
-	return false
-}

@@ -6,7 +6,6 @@ import (
 
 	SDK "github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/evalphobia/aws-sdk-go-v2-wrapper/private/pointers"
-	_ "github.com/evalphobia/aws-sdk-go-v2-wrapper/private/pointers"
 )
 
 type ArchivalSummary struct {
@@ -273,6 +272,7 @@ func newCapacityMap(m map[string]SDK.Capacity) map[string]Capacity {
 
 	result := make(map[string]Capacity, len(m))
 	for key, val := range m {
+		val := val
 		result[key] = newCapacity(&val)
 	}
 	return result
@@ -386,31 +386,6 @@ type GlobalSecondaryIndex struct {
 
 	// optional
 	ProvisionedThroughput ProvisionedThroughput
-}
-
-func newGlobalSecondaryIndexes(list []SDK.GlobalSecondaryIndex) []GlobalSecondaryIndex {
-	if len(list) == 0 {
-		return nil
-	}
-
-	result := make([]GlobalSecondaryIndex, len(list))
-	for i, v := range list {
-		result[i] = newGlobalSecondaryIndex(v)
-	}
-	return result
-}
-
-func newGlobalSecondaryIndex(o SDK.GlobalSecondaryIndex) GlobalSecondaryIndex {
-	result := GlobalSecondaryIndex{}
-
-	if o.IndexName != nil {
-		result.IndexName = *o.IndexName
-	}
-
-	result.Projection = newProjection(o.Projection)
-	result.ProvisionedThroughput = newProvisionedThroughput(o.ProvisionedThroughput)
-	result.KeySchema = newKeySchemaElements(o.KeySchema)
-	return result
 }
 
 func (r GlobalSecondaryIndex) ToSDK() SDK.GlobalSecondaryIndex {
@@ -614,30 +589,6 @@ type LocalSecondaryIndex struct {
 	Projection Projection
 }
 
-func newLocalSecondaryIndexs(list []SDK.LocalSecondaryIndex) []LocalSecondaryIndex {
-	if len(list) == 0 {
-		return nil
-	}
-
-	result := make([]LocalSecondaryIndex, len(list))
-	for i, v := range list {
-		result[i] = newLocalSecondaryIndex(v)
-	}
-	return result
-}
-
-func newLocalSecondaryIndex(o SDK.LocalSecondaryIndex) LocalSecondaryIndex {
-	result := LocalSecondaryIndex{}
-
-	if o.IndexName != nil {
-		result.IndexName = *o.IndexName
-	}
-
-	result.KeySchema = newKeySchemaElements(o.KeySchema)
-	result.Projection = newProjection(o.Projection)
-	return result
-}
-
 func (r LocalSecondaryIndex) ToSDK() SDK.LocalSecondaryIndex {
 	o := SDK.LocalSecondaryIndex{}
 
@@ -739,21 +690,6 @@ type ProvisionedThroughput struct {
 	WriteCapacityUnits int64
 }
 
-func newProvisionedThroughput(o *SDK.ProvisionedThroughput) ProvisionedThroughput {
-	result := ProvisionedThroughput{}
-	if o == nil {
-		return result
-	}
-
-	if o.ReadCapacityUnits != nil {
-		result.ReadCapacityUnits = *o.ReadCapacityUnits
-	}
-	if o.WriteCapacityUnits != nil {
-		result.WriteCapacityUnits = *o.WriteCapacityUnits
-	}
-	return result
-}
-
 func (r ProvisionedThroughput) ToSDK() SDK.ProvisionedThroughput {
 	return SDK.ProvisionedThroughput{
 		ReadCapacityUnits:  pointers.Long64(r.ReadCapacityUnits),
@@ -804,7 +740,7 @@ func newProvisionedThroughputDescription(o *SDK.ProvisionedThroughputDescription
 
 type ReplicaDescription struct {
 	GlobalSecondaryIndexes       []ReplicaGlobalSecondaryIndexDescription
-	KMSMasterKeyId               string
+	KMSMasterKeyID               string
 	RegionName                   string
 	ReplicaStatus                ReplicaStatus
 	ReplicaStatusDescription     string
@@ -829,7 +765,7 @@ func newReplicaDescription(o SDK.ReplicaDescription) ReplicaDescription {
 	result := ReplicaDescription{}
 
 	if o.KMSMasterKeyId != nil {
-		result.KMSMasterKeyId = *o.KMSMasterKeyId
+		result.KMSMasterKeyID = *o.KMSMasterKeyId
 	}
 	if o.RegionName != nil {
 		result.RegionName = *o.RegionName
@@ -941,23 +877,6 @@ type SSESpecification struct {
 	Enabled        bool
 	KMSMasterKeyID string
 	SSEType        SSEType
-}
-
-func newSSESpecification(o *SDK.SSESpecification) SSESpecification {
-	result := SSESpecification{}
-	if o == nil {
-		return result
-	}
-
-	if o.Enabled != nil {
-		result.Enabled = *o.Enabled
-	}
-	if o.KMSMasterKeyId != nil {
-		result.KMSMasterKeyID = *o.KMSMasterKeyId
-	}
-
-	result.SSEType = SSEType(o.SSEType)
-	return result
 }
 
 func (r SSESpecification) ToSDK() SDK.SSESpecification {
@@ -1098,30 +1017,6 @@ func newTableDescription(o SDK.TableDescription) TableDescription {
 type Tag struct {
 	Key   string
 	Value string
-}
-
-func newTags(list []SDK.Tag) []Tag {
-	if len(list) == 0 {
-		return nil
-	}
-
-	result := make([]Tag, len(list))
-	for i, v := range list {
-		result[i] = newTag(v)
-	}
-	return result
-}
-
-func newTag(o SDK.Tag) Tag {
-	result := Tag{}
-
-	if o.Key != nil {
-		result.Key = *o.Key
-	}
-	if o.Value != nil {
-		result.Value = *o.Value
-	}
-	return result
 }
 
 func (r Tag) ToSDK() SDK.Tag {
