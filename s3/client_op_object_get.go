@@ -123,7 +123,7 @@ func (r GetObjectRequest) ToInput() *SDK.GetObjectInput {
 
 // GetObjectResult contains results from `GetObject` operation.
 type GetObjectResult struct {
-	IsExist bool
+	Exists bool
 
 	AcceptRanges              string
 	Body                      io.ReadCloser
@@ -164,7 +164,7 @@ func NewGetObjectResult(output *SDK.GetObjectResponse) *GetObjectResult {
 		return r
 	}
 
-	r.IsExist = true
+	r.Exists = true
 
 	if output.AcceptRanges != nil {
 		r.AcceptRanges = *output.AcceptRanges

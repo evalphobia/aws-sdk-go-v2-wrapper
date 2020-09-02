@@ -82,7 +82,7 @@ func createTestBucket(name string) error {
 	}
 
 	ctx := context.Background()
-	ok, err := svc.IsExistBucket(ctx, name)
+	ok, err := svc.ExistBucket(ctx, name)
 	switch {
 	case err != nil:
 		return err

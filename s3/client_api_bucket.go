@@ -18,8 +18,8 @@ func (svc *S3) DeleteBucketFromName(ctx context.Context, name string) error {
 	})
 }
 
-// IsExistBucket checks if the bucket already exists or not.
-func (svc *S3) IsExistBucket(ctx context.Context, name string) (bool, error) {
+// ExistBucket checks if the bucket already exists or not.
+func (svc *S3) ExistBucket(ctx context.Context, name string) (bool, error) {
 	return svc.HeadBucket(ctx, HeadBucketRequest{
 		Bucket: name,
 	})
