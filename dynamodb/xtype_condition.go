@@ -2,6 +2,7 @@ package dynamodb
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb/expression"
 )
@@ -11,6 +12,7 @@ type XConditions struct {
 	KeyConditions []XCondition
 	Conditions    []XCondition
 	Filters       []XCondition
+	Updates       []XUpdateCondition
 	Projections   []string
 }
 
@@ -102,6 +104,18 @@ func (x XConditions) Build() (expression.Expression, error) {
 		b = b.WithFilter(filt)
 	}
 
+	if len(x.Updates) != 0 {
+		cond := x.Updates[0].NewCondition()
+
+		// for multiple conditions
+		if len(x.Updates) > 1 {
+			for _, v := range x.Updates[1:] {
+				cond = v.updateCondition(cond)
+			}
+		}
+		b = b.WithUpdate(cond)
+	}
+
 	if len(x.Projections) != 0 {
 		list := make([]expression.NameBuilder, len(x.Projections))
 		for i, v := range x.Projections {
@@ -116,7 +130,7 @@ func (x XConditions) Build() (expression.Expression, error) {
 // XCondition contains single condition parameters.
 type XCondition struct {
 	Name     string
-	Value    string
+	Value    interface{}
 	Operator ComparisonOperator
 
 	// optional
@@ -141,7 +155,7 @@ func (x XCondition) KeyCondition() (expression.KeyConditionBuilder, error) {
 	case ComparisonOperatorGt:
 		return e.GreaterThan(expression.Value(x.Value)), nil
 	case ComparisonOperatorBeginsWith:
-		return e.BeginsWith(x.Value), nil
+		return e.BeginsWith(fmt.Sprint(x.Value)), nil
 	case ComparisonOperatorBetween:
 		if len(x.OtherValues) == 0 {
 			return expression.KeyConditionBuilder{}, errors.New("Condition 'BETWEEN' must set 'OtherValues[0]'")
@@ -166,7 +180,7 @@ func (x XCondition) Condition() (expression.ConditionBuilder, error) {
 	case ComparisonOperatorGt:
 		return e.GreaterThan(expression.Value(x.Value)), nil
 	case ComparisonOperatorBeginsWith:
-		return e.BeginsWith(x.Value), nil
+		return e.BeginsWith(fmt.Sprint(x.Value)), nil
 	case ComparisonOperatorBetween:
 		if len(x.OtherValues) == 0 {
 			return expression.ConditionBuilder{}, errors.New("Condition 'BETWEEN' must set 'OtherValues[0]'")
@@ -181,14 +195,76 @@ func (x XCondition) Condition() (expression.ConditionBuilder, error) {
 	case ComparisonOperatorNe:
 		return e.NotEqual(expression.Value(x.Value)), nil
 	case ComparisonOperatorContains:
-		return e.Contains(x.Value), nil
+		return e.Contains(fmt.Sprint(x.Value)), nil
 	case ComparisonOperatorAttrExists:
 		return e.AttributeExists(), nil
 	case ComparisonOperatorAttrNotExists:
 		return e.AttributeNotExists(), nil
 	case ComparisonOperatorAttrType:
-		return e.AttributeType(expression.DynamoDBAttributeType(x.Value)), nil
+		return e.AttributeType(expression.DynamoDBAttributeType(fmt.Sprint(x.Value))), nil
 	default:
 		return e.Equal(expression.Value(x.Value)), nil
 	}
 }
+
+type XUpdateCondition struct {
+	Name      string
+	Value     interface{}
+	Operation OperationMode
+
+	SetType       SetType
+	SetTypeKey    string
+	SetTypeValue2 interface{}
+}
+
+func (x XUpdateCondition) NewCondition() expression.UpdateBuilder {
+	return x.updateCondition(expression.UpdateBuilder{})
+}
+
+func (x XUpdateCondition) updateCondition(b expression.UpdateBuilder) expression.UpdateBuilder {
+	switch x.Operation {
+	case OperationModeSET:
+		return x.updateConditionSet(b)
+	case OperationModeREMOVE:
+		return b.Remove(expression.Name(x.Name))
+	case OperationModeADD:
+		return b.Add(expression.Name(x.Name), expression.Value(x.Value))
+	default:
+		return x.updateConditionSet(b)
+	}
+}
+
+func (x XUpdateCondition) updateConditionSet(b expression.UpdateBuilder) expression.UpdateBuilder {
+	name := expression.Name(x.Name)
+	value := expression.Value(x.Value)
+	switch x.SetType {
+	case SetTypePlus:
+		return b.Set(name, expression.Plus(value, expression.Value(x.SetTypeValue2)))
+	case SetTypeMinus:
+		return b.Set(name, expression.Minus(value, expression.Value(x.SetTypeValue2)))
+	case SetTypeListAppend:
+		return b.Set(name, expression.ListAppend(value, expression.Value(x.SetTypeValue2)))
+	case SetTypeIfNotExists:
+		return b.Set(name, expression.IfNotExists(expression.Name(x.SetTypeKey), expression.Value(x.SetTypeValue2)))
+	default:
+		return b.Set(name, value)
+	}
+}
+
+type OperationMode string
+
+const (
+	OperationModeSET    OperationMode = "SET"
+	OperationModeREMOVE OperationMode = "REMOVE"
+	OperationModeADD    OperationMode = "ADD"
+	OperationModeDELETE OperationMode = "DELETE"
+)
+
+type SetType string
+
+const (
+	SetTypePlus        SetType = "PLUS"
+	SetTypeMinus       SetType = "MINUS"
+	SetTypeListAppend  SetType = "LIST_APPEND"
+	SetTypeIfNotExists SetType = "IF_NOT_EXISTS"
+)

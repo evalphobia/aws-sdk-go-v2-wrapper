@@ -199,6 +199,56 @@ func (r AttributeValue) ToSDK() SDK.AttributeValue {
 	return o
 }
 
+func (r AttributeValue) GetValue() interface{} {
+	switch {
+	case len(r.Binary) != 0:
+		return r.Binary
+	case len(r.BinarySet) != 0:
+		return r.BinarySet
+	case len(r.List) != 0:
+		list := make([]interface{}, len(r.List))
+		for i, v := range r.List {
+			list[i] = v.GetValue()
+		}
+		return list
+	case len(r.Map) != 0:
+		m := make(map[string]interface{}, len(r.Map))
+		for key, val := range r.Map {
+			m[key] = val.GetValue()
+		}
+		return m
+	case r.Number != "":
+		v, _ := strconv.Atoi(r.Number)
+		return v
+	case r.NumberInt != 0:
+		return r.NumberInt
+	case r.NumberFloat != 0:
+		return r.NumberFloat
+	case r.HasNumber:
+		return 0
+	case len(r.NumberSet) != 0:
+		list := make([]int, len(r.NumberSet))
+		for i, v := range r.NumberSet {
+			list[i], _ = strconv.Atoi(v)
+		}
+		return list
+	case len(r.NumberSetInt) != 0:
+		return r.NumberSetInt
+	case len(r.NumberSetFloat) != 0:
+		return r.NumberSetFloat
+	case r.String != "":
+		return r.String
+	case len(r.StringSet) != 0:
+		return r.StringSet
+	case r.HasBool,
+		r.Bool:
+		return r.Bool
+	case r.Null:
+		return newArchivalSummary
+	}
+	return nil
+}
+
 func (r AttributeValue) hasValue() bool {
 	switch {
 	case r.HasNumber,
