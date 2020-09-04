@@ -8,6 +8,7 @@ const (
 	envEndpoint         = "AWS_ENDPOINT"
 	envDynamoDBEndpoint = "AWS_DYNAMODB_ENDPOINT"
 	envEC2Endpoint      = "AWS_EC2_ENDPOINT"
+	envKMSEndpoint      = "AWS_KMS_ENDPOINT"
 	envS3Endpoint       = "AWS_S3_ENDPOINT"
 	envSNSEndpoint      = "AWS_SNS_ENDPOINT"
 	envSQSEndpoint      = "AWS_SQS_ENDPOINT"
@@ -31,6 +32,11 @@ func EnvDynamoDBEndpoint() string {
 // EnvEC2Endpoint get EC2 endpoint from env vars.
 func EnvEC2Endpoint() string {
 	return os.Getenv(envEC2Endpoint)
+}
+
+// EnvKMSEndpoint get KMS endpoint from env vars.
+func EnvKMSEndpoint() string {
+	return os.Getenv(envKMSEndpoint)
 }
 
 // EnvS3Endpoint get S3 endpoint from env vars.
