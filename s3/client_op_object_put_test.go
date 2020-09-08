@@ -22,7 +22,7 @@ func TestPutObject(t *testing.T) {
 	is.NoErr(err)
 	is.True(resPut.ETag != "") // ETag must be set
 
-	resGet, err := svc.GetObjectFromPath(ctx, testPutBucketName, "TestPutObject/test-file-01")
+	resGet, err := svc.XGetObjectFromPath(ctx, testPutBucketName, "TestPutObject/test-file-01")
 	is.NoErr(err)
 	is.Equal(resGet.ETag, resPut.ETag) // ETag must be same
 	byt, err := resGet.ToBytes()
@@ -38,7 +38,7 @@ func TestPutObject(t *testing.T) {
 	is.NoErr(err)
 	is.True(resPut.ETag != "") // ETag must be set
 
-	resGet, err = svc.GetObjectFromPath(ctx, testPutBucketName, "TestPutObject/test-file-01")
+	resGet, err = svc.XGetObjectFromPath(ctx, testPutBucketName, "TestPutObject/test-file-01")
 	is.NoErr(err)
 	is.Equal(resGet.ETag, resPut.ETag) // ETag must be same
 	byt, err = resGet.ToBytes()

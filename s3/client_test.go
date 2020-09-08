@@ -82,7 +82,7 @@ func createTestBucket(name string) error {
 	}
 
 	ctx := context.Background()
-	ok, err := svc.ExistBucket(ctx, name)
+	ok, err := svc.XExistBucket(ctx, name)
 	switch {
 	case err != nil:
 		return err
@@ -90,6 +90,6 @@ func createTestBucket(name string) error {
 		return nil
 	}
 
-	_, err = svc.CreateBucketFromName(ctx, name)
+	_, err = svc.XCreateBucketFromName(ctx, name)
 	return err
 }

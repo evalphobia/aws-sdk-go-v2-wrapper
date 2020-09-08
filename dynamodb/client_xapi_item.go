@@ -9,8 +9,8 @@ import (
 	"github.com/evalphobia/aws-sdk-go-v2-wrapper/private/pointers"
 )
 
-// GetSingleItem gets single item.
-func (svc *DynamoDB) GetSingleItem(ctx context.Context, in GetSingleItemInput) (map[string]AttributeValue, error) {
+// XGetSingleItem gets single item.
+func (svc *DynamoDB) XGetSingleItem(ctx context.Context, in XGetSingleItemRequest) (map[string]AttributeValue, error) {
 	req, err := in.ToRequest()
 	if err != nil {
 		return nil, err
@@ -26,7 +26,7 @@ func (svc *DynamoDB) GetSingleItem(ctx context.Context, in GetSingleItemInput) (
 	return result.Item, nil
 }
 
-type GetSingleItemInput struct {
+type XGetSingleItemRequest struct {
 	TableName string
 
 	HashKeyName  string
@@ -36,7 +36,7 @@ type GetSingleItemInput struct {
 	RangeKeyValue interface{}
 }
 
-func (in GetSingleItemInput) ToRequest() (GetItemRequest, error) {
+func (in XGetSingleItemRequest) ToRequest() (GetItemRequest, error) {
 	r := GetItemRequest{
 		TableName: in.TableName,
 		Key:       make(map[string]AttributeValue),
@@ -63,7 +63,8 @@ func (in GetSingleItemInput) ToRequest() (GetItemRequest, error) {
 	return r, nil
 }
 
-func (svc *DynamoDB) BatchDeleteItems(ctx context.Context, req BatchDeleteItemRequest) error {
+// XBatchDeleteItems deletes multiple items using 'BatchWriteItems'.
+func (svc *DynamoDB) XBatchDeleteItems(ctx context.Context, req XBatchDeleteItemRequest) error {
 	tableName := req.TableName
 	hashKey := req.HashKey
 	rangeKey := req.RangeKey
@@ -109,16 +110,18 @@ func (svc *DynamoDB) BatchDeleteItems(ctx context.Context, req BatchDeleteItemRe
 	return nil
 }
 
-type BatchDeleteItemRequest struct {
+// XBatchDeleteItemRequest is parameters of 'XBatchDeleteItems'.
+type XBatchDeleteItemRequest struct {
 	TableName string
 	HashKey   string
 	RangeKey  string
-	Items     []BatchDeleteItem
+	Items     []XBatchDeleteItem
 }
 
-func (r BatchDeleteItemRequest) ToChunks() [][]BatchDeleteItem {
+// ToChunks makes a slice of 25 items slices to avoid the limitation of 'BatchWriteItem'.
+func (r XBatchDeleteItemRequest) ToChunks() [][]XBatchDeleteItem {
 	const ddbSize = 25
-	var parts [][]BatchDeleteItem
+	var parts [][]XBatchDeleteItem
 
 	items := r.Items
 	maxSize := len(items)
@@ -134,15 +137,16 @@ func (r BatchDeleteItemRequest) ToChunks() [][]BatchDeleteItem {
 	return parts
 }
 
-type BatchDeleteItem struct {
+// XBatchDeleteItem contains key values to delete and used in 'XBatchDeleteItemRequest'.
+type XBatchDeleteItem struct {
 	HashKeyValue  interface{}
 	RangeKeyValue interface{}
 }
 
-// ForceDeleteAll deltes all data in the table.
-// This performs scan all item and delete it via `BatchWriteItem`.
-// Consider using `DeleteTable` instead.
-func (svc *DynamoDB) ForceDeleteAll(ctx context.Context, tableName string) error {
+// XForceDeleteAll deletes all data in the table.
+// This performs scan all item and delete it via 'BatchWriteItem'.
+// For big tables, consider using 'DeleteTable' instead.
+func (svc *DynamoDB) XForceDeleteAll(ctx context.Context, tableName string) error {
 	descResp, err := svc.DescribeTable(ctx, DescribeTableRequest{
 		TableName: tableName,
 	})
@@ -173,9 +177,9 @@ func (svc *DynamoDB) ForceDeleteAll(ctx context.Context, tableName string) error
 			return nil
 		}
 
-		items := make([]BatchDeleteItem, len(result.Items))
+		items := make([]XBatchDeleteItem, len(result.Items))
 		for i, v := range result.Items {
-			item := BatchDeleteItem{
+			item := XBatchDeleteItem{
 				HashKeyValue: newAttributeValue(v[hashKey]).GetValue(),
 			}
 			if rangeKey != "" {
@@ -184,13 +188,13 @@ func (svc *DynamoDB) ForceDeleteAll(ctx context.Context, tableName string) error
 			items[i] = item
 		}
 
-		r := BatchDeleteItemRequest{
+		r := XBatchDeleteItemRequest{
 			TableName: tableName,
 			HashKey:   hashKey,
 			RangeKey:  rangeKey,
 			Items:     items,
 		}
-		if err := svc.BatchDeleteItems(ctx, r); err != nil {
+		if err := svc.XBatchDeleteItems(ctx, r); err != nil {
 			return err
 		}
 	}
