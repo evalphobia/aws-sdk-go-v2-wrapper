@@ -6,7 +6,7 @@ aws-sdk-go-v2-wrapper | KMS
 
 ```go
 import (
-    "context"
+	"context"
 
 	"github.com/evalphobia/aws-sdk-go-v2-wrapper/config"
 	"github.com/evalphobia/aws-sdk-go-v2-wrapper/kms"
