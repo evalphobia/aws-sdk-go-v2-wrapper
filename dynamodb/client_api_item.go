@@ -195,18 +195,3 @@ func (svc *DynamoDB) ForceDeleteAll(ctx context.Context, tableName string) error
 		}
 	}
 }
-
-func sliceItemsToChunks(nums []map[string]SDK.AttributeValue, size int) [][]map[string]SDK.AttributeValue {
-	var parts [][]map[string]SDK.AttributeValue
-	maxSize := len(nums)
-
-	for i := 0; i < maxSize; i += size {
-		end := i + size
-		if end > maxSize {
-			end = maxSize
-		}
-
-		parts = append(parts, nums[i:end])
-	}
-	return parts
-}
