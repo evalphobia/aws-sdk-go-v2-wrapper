@@ -59,8 +59,9 @@ func TestSetLogger(t *testing.T) {
 
 func getTestConfig() config.Config {
 	return config.Config{
-		AccessKey:        "access",
-		SecretKey:        "secret",
+		// creds for minio
+		AccessKey:        "dummy",
+		SecretKey:        "dummydummy",
 		CommonEndpoint:   defaultEndpoint,
 		S3ForcePathStyle: true,
 	}
@@ -82,7 +83,7 @@ func createTestBucket(name string) error {
 	}
 
 	ctx := context.Background()
-	ok, err := svc.ExistBucket(ctx, name)
+	ok, err := svc.XExistBucket(ctx, name)
 	switch {
 	case err != nil:
 		return err
@@ -90,6 +91,6 @@ func createTestBucket(name string) error {
 		return nil
 	}
 
-	_, err = svc.CreateBucketFromName(ctx, name)
+	_, err = svc.XCreateBucketFromName(ctx, name)
 	return err
 }

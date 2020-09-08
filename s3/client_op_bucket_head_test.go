@@ -13,26 +13,28 @@ func TestHeadBucket(t *testing.T) {
 	ctx := context.Background()
 	svc := getTestClient(t)
 
-	_ = svc.DeleteBucketFromName(ctx, testPutBucketName)
-	_ = svc.DeleteBucketFromName(ctx, nonExistedBucket)
+	_ = svc.XForceDeleteBucketFromName(ctx, testPutBucketName)
+	_ = svc.XForceDeleteBucketFromName(ctx, nonExistedBucket)
 
 	ok, err := svc.HeadBucket(ctx, HeadBucketRequest{
 		Bucket: nonExistedBucket,
 	})
 	is.NoErr(err)
-	is.True(!ok) // non-existed bucket shold be false
+	is.True(!ok) // non-existed bucket should be false
 
-	_, _ = svc.CreateBucketFromName(ctx, testPutBucketName)
+	_, _ = svc.XCreateBucketFromName(ctx, testPutBucketName)
 	ok, err = svc.HeadBucket(ctx, HeadBucketRequest{
 		Bucket: testPutBucketName,
 	})
 	is.NoErr(err)
-	is.True(ok) // existed bucket shold be true
+	is.True(ok) // existed bucket should be true
 
-	_ = svc.DeleteBucketFromName(ctx, testPutBucketName)
+	err = svc.XDeleteBucketFromName(ctx, testPutBucketName)
+	is.NoErr(err)
+
 	ok, err = svc.HeadBucket(ctx, HeadBucketRequest{
 		Bucket: testPutBucketName,
 	})
 	is.NoErr(err)
-	is.True(!ok) // deleted bucket shold be false
+	is.True(!ok) // deleted bucket should be false
 }

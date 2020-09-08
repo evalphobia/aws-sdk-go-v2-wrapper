@@ -7,36 +7,36 @@ import (
 	"github.com/matryer/is"
 )
 
-func TestClientAPIObject(t *testing.T) {
+func TestClientXAPIObject(t *testing.T) {
 	is := is.NewRelaxed(t)
 	ctx := context.Background()
 	svc := getTestClient(t)
 	_ = createTestBucket(testPutBucketName)
 
-	const path = "TestClientAPIObject/test"
+	const path = "TestClientXAPIObject/test"
 
 	// check non-existed object
-	_, err := svc.DeleteObjectFromPath(ctx, testPutBucketName, path)
+	_, err := svc.XDeleteObjectFromPath(ctx, testPutBucketName, path)
 	is.NoErr(err)
 
-	ok, err := svc.ExistObject(ctx, testPutBucketName, path)
+	ok, err := svc.XExistObject(ctx, testPutBucketName, path)
 	is.NoErr(err)
 	is.Equal(ok, false)
 
-	resGet, err := svc.GetObjectFromPath(ctx, testPutBucketName, path)
+	resGet, err := svc.XGetObjectFromPath(ctx, testPutBucketName, path)
 	is.NoErr(err)
 	is.Equal(resGet.Exists, false)
 
 	// check existed object
-	resPut, err := svc.PutObjectToPath(ctx, testPutBucketName, path, []byte("001"))
+	resPut, err := svc.XPutObjectToPath(ctx, testPutBucketName, path, []byte("001"))
 	is.NoErr(err)
 	is.True(resPut.ETag != "") // ETag must be set
 
-	ok, err = svc.ExistObject(ctx, testPutBucketName, path)
+	ok, err = svc.XExistObject(ctx, testPutBucketName, path)
 	is.NoErr(err)
 	is.True(ok)
 
-	resGet, err = svc.GetObjectFromPath(ctx, testPutBucketName, path)
+	resGet, err = svc.XGetObjectFromPath(ctx, testPutBucketName, path)
 	is.NoErr(err)
 	is.Equal(resGet.ETag, resPut.ETag) // ETag must be same
 	byt, err := resGet.ToBytes()
@@ -44,11 +44,11 @@ func TestClientAPIObject(t *testing.T) {
 	is.Equal(byt, []byte("001")) // content must be updated
 
 	// update existed object
-	resPut, err = svc.PutObjectToPath(ctx, testPutBucketName, path, []byte("002"))
+	resPut, err = svc.XPutObjectToPath(ctx, testPutBucketName, path, []byte("002"))
 	is.NoErr(err)
 	is.True(resPut.ETag != "") // ETag must be set
 
-	resGet, err = svc.GetObjectFromPath(ctx, testPutBucketName, path)
+	resGet, err = svc.XGetObjectFromPath(ctx, testPutBucketName, path)
 	is.NoErr(err)
 	is.Equal(resGet.ETag, resPut.ETag) // ETag must be same
 	byt, err = resGet.ToBytes()
@@ -56,17 +56,17 @@ func TestClientAPIObject(t *testing.T) {
 	is.Equal(byt, []byte("002")) // content must be updated
 
 	// check deleted object
-	_, err = svc.DeleteObjectFromPath(ctx, testPutBucketName, path)
+	_, err = svc.XDeleteObjectFromPath(ctx, testPutBucketName, path)
 	is.NoErr(err)
 
-	ok, err = svc.ExistObject(ctx, testPutBucketName, path)
+	ok, err = svc.XExistObject(ctx, testPutBucketName, path)
 	is.NoErr(err)
 	is.Equal(ok, false)
 
-	resGet, err = svc.GetObjectFromPath(ctx, testPutBucketName, path)
+	resGet, err = svc.XGetObjectFromPath(ctx, testPutBucketName, path)
 	is.NoErr(err)
 	is.Equal(resGet.Exists, false)
 
-	_, err = svc.DeleteObjectFromPath(ctx, testPutBucketName, path)
+	_, err = svc.XDeleteObjectFromPath(ctx, testPutBucketName, path)
 	is.NoErr(err)
 }

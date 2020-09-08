@@ -49,7 +49,48 @@ aws-sdk-go-v2-wrapper
 [404]: https://app.fossa.com/projects/git%2Bgithub.com%2Fevalphobia%2Faws-sdk-go-v2-wrapper?ref=badge_shield
 
 
-Simple wrapper for aws-sdk-go-v2
+Simple wrapper for [aws-sdk-go-v2](https://github.com/aws/aws-sdk-go-v2)
+
+
+## What's for?
+
+The primary motivation is for my personal uses.
+AWS SDK provides solid and rubust APIs. But sometimes it's very painful for me, too much parameters and many pointer values.
+(I don't want to check `nil` every lines.)
+
+I don't know it's useful for others.
+It might helpful to just see these codes to know how to use [aws-sdk-go-v2](https://github.com/aws/aws-sdk-go-v2) SDK besides official example test code.
+
+
+## APIs
+
+aws-sdk-go-v2-wrapper provides three types of APIs.
+
+| Type | Description | NamingRule |
+|:--|:--|:--|
+| Wrapper API | This type APIs wraps `Raw` API to avoid pointer values. | - |
+| Raw API| This type APIs just call methods of [aws-sdk-go-v2](https://github.com/aws/aws-sdk-go-v2). You can use it when the APIs are not implemented in this repo (or Wrapper APIs are buggy :sweat_smile: ). | `Raw...` |
+| X API | This type APIs provides easy way to call frequently used functions. | `X...` |
+
+## Services
+
+| Name |
+|:--|
+| [dynamodb](/dynamodb) |
+| [kms](/kms) |
+| [s3](/s3) |
+
+## Environment variables
+
+| Name | Description |
+|:--|:--|
+| `AWS_REGION` | Default AWS region for clients. |
+| `AWS_ENDPOINT` | Default endpoints for clients. |
+| `AWS_DYNAMODB_ENDPOINT` | Custom endpoint for DynamoDB client. |
+| `AWS_KMS_ENDPOINT` | Custom endpoint for KMS client. |
+| `AWS_S3_ENDPOINT` | Custom endpoint for s3 client. |
+
+Besides above, supported some values from [official env_config](https://github.com/aws/aws-sdk-go-v2/blob/master/aws/external/env_config.go)
 
 
 ## License

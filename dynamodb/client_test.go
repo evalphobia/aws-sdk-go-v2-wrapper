@@ -81,7 +81,7 @@ func createTestTable(name string) error {
 	}
 
 	ctx := context.Background()
-	ok, err := svc.ExistTable(ctx, name)
+	ok, err := svc.XExistTable(ctx, name)
 	switch {
 	case err != nil:
 		return err

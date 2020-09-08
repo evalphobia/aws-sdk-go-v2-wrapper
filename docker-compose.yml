@@ -6,8 +6,12 @@ services:
     ports:
       - "8000:8000"
   s3:
-    image: evalphobia/fake-s3:1.0.0
+    image: minio/minio
     volumes:
-      - ".local/s3_data:/s3_data"
+      - ".local/s3_data:/export"
     ports:
-      - "4567:4567"
+      - "4567:9000"
+    environment:
+      MINIO_ACCESS_KEY: dummy
+      MINIO_SECRET_KEY: dummydummy
+    command: server /export
