@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	SDK "github.com/aws/aws-sdk-go-v2/service/dynamodb"
+	"github.com/evalphobia/aws-sdk-go-v2-wrapper/errors"
 	"github.com/evalphobia/aws-sdk-go-v2-wrapper/private/pointers"
 )
 
@@ -62,6 +63,82 @@ func (in GetSingleItemInput) ToRequest() (GetItemRequest, error) {
 	return r, nil
 }
 
+func (svc *DynamoDB) BatchDeleteItems(ctx context.Context, req BatchDeleteItemRequest) error {
+	tableName := req.TableName
+	hashKey := req.HashKey
+	rangeKey := req.RangeKey
+
+	var errs errors.ErrorList
+	itemChunks := req.ToChunks()
+	for _, items := range itemChunks {
+		writeReq := make([]WriteRequest, len(items))
+		for i, v := range items {
+			av, err := RawMarshal(v.HashKeyValue, defaultStructTag)
+			if err != nil {
+				return err
+			}
+
+			delKeys := map[string]AttributeValue{
+				hashKey: newAttributeValue(*av),
+			}
+
+			if rangeKey != "" {
+				av, err := RawMarshal(v.RangeKeyValue, defaultStructTag)
+				if err != nil {
+					return err
+				}
+				delKeys[rangeKey] = newAttributeValue(*av)
+			}
+			writeReq[i] = WriteRequest{
+				DeleteKeys: delKeys,
+			}
+		}
+
+		_, err := svc.BatchWriteItem(ctx, BatchWriteItemRequest{
+			RequestItems: map[string][]WriteRequest{
+				tableName: writeReq,
+			},
+		})
+		if err != nil {
+			errs = append(errs, err)
+		}
+	}
+	if len(errs) != 0 {
+		return errs
+	}
+	return nil
+}
+
+type BatchDeleteItemRequest struct {
+	TableName string
+	HashKey   string
+	RangeKey  string
+	Items     []BatchDeleteItem
+}
+
+func (r BatchDeleteItemRequest) ToChunks() [][]BatchDeleteItem {
+	const ddbSize = 25
+	var parts [][]BatchDeleteItem
+
+	items := r.Items
+	maxSize := len(items)
+
+	for i := 0; i < maxSize; i += ddbSize {
+		end := i + ddbSize
+		if end > maxSize {
+			end = maxSize
+		}
+
+		parts = append(parts, items[i:end])
+	}
+	return parts
+}
+
+type BatchDeleteItem struct {
+	HashKeyValue  interface{}
+	RangeKeyValue interface{}
+}
+
 // ForceDeleteAll deltes all data in the table.
 // This performs scan all item and delete it via `BatchWriteItem`.
 // Consider using `DeleteTable` instead.
@@ -75,6 +152,7 @@ func (svc *DynamoDB) ForceDeleteAll(ctx context.Context, tableName string) error
 	case descResp == nil:
 		return fmt.Errorf("Unexpected response from `DescribeTable` | [%s]", tableName)
 	}
+
 	schema := descResp.Table.KeySchema
 	hashKey := schema[0].AttributeName
 	rangeKey := ""
@@ -95,45 +173,25 @@ func (svc *DynamoDB) ForceDeleteAll(ctx context.Context, tableName string) error
 			return nil
 		}
 
-		const maxDeleteItems = 25
-		itemChunks := sliceItemsToChunks(result.Items, maxDeleteItems)
-		for _, items := range itemChunks {
-			writeReq := make([]WriteRequest, len(items))
-			for i, v := range items {
-				delKeys := map[string]AttributeValue{
-					hashKey: newAttributeValue(v[hashKey]),
-				}
-				if rangeKey != "" {
-					delKeys[rangeKey] = newAttributeValue(v[rangeKey])
-				}
-				writeReq[i] = WriteRequest{
-					DeleteKeys: delKeys,
-				}
+		items := make([]BatchDeleteItem, len(result.Items))
+		for i, v := range result.Items {
+			item := BatchDeleteItem{
+				HashKeyValue: newAttributeValue(v[hashKey]).GetValue(),
 			}
-
-			_, err = svc.BatchWriteItem(ctx, BatchWriteItemRequest{
-				RequestItems: map[string][]WriteRequest{
-					tableName: writeReq,
-				},
-			})
-			if err != nil {
-				return err
+			if rangeKey != "" {
+				item.RangeKeyValue = newAttributeValue(v[rangeKey]).GetValue()
 			}
-		}
-	}
-}
-
-func sliceItemsToChunks(nums []map[string]SDK.AttributeValue, size int) [][]map[string]SDK.AttributeValue {
-	var parts [][]map[string]SDK.AttributeValue
-	maxSize := len(nums)
-
-	for i := 0; i < maxSize; i += size {
-		end := i + size
-		if end > maxSize {
-			end = maxSize
+			items[i] = item
 		}
 
-		parts = append(parts, nums[i:end])
+		r := BatchDeleteItemRequest{
+			TableName: tableName,
+			HashKey:   hashKey,
+			RangeKey:  rangeKey,
+			Items:     items,
+		}
+		if err := svc.BatchDeleteItems(ctx, r); err != nil {
+			return err
+		}
 	}
-	return parts
 }

@@ -9,28 +9,28 @@ import (
 	"github.com/evalphobia/aws-sdk-go-v2-wrapper/private/pointers"
 )
 
-// Query executes `Query` operation.
-func (svc *DynamoDB) Query(ctx context.Context, r QueryRequest) (*QueryResult, error) {
+// Scan executes `Scan` operation.
+func (svc *DynamoDB) Scan(ctx context.Context, r ScanRequest) (*ScanResult, error) {
 	in, err := r.ToInput()
 	if err != nil {
 		return nil, err
 	}
 
-	out, err := svc.RawQuery(ctx, in)
+	out, err := svc.RawScan(ctx, in)
 	if err == nil {
-		return NewQueryResult(out), nil
+		return NewScanResult(out), nil
 	}
 
 	err = svc.errWrap(errors.ErrorData{
 		Err:          err,
-		AWSOperation: "Query",
+		AWSOperation: "Scan",
 	})
 	svc.Errorf(err.Error())
 	return nil, err
 }
 
-// QueryRequest has parameters for `Query` operation.
-type QueryRequest struct {
+// ScanRequest has parameters for `Scan` operation.
+type ScanRequest struct {
 	TableName string
 
 	// optional
@@ -40,19 +40,18 @@ type QueryRequest struct {
 	ExpressionAttributeValues map[string]AttributeValue
 	FilterExpression          string
 	IndexName                 string
-	KeyConditionExpression    string
-	KeyConditions             map[string]Condition
 	Limit                     int64
 	ProjectionExpression      string
 	ReturnConsumedCapacity    ReturnConsumedCapacity
-	ScanIndexForward          bool
+	Segment                   int64
 	Select                    Select
+	TotalSegments             int64
 
 	XConditions XConditions
 }
 
-func (r QueryRequest) ToInput() (*SDK.QueryInput, error) {
-	in := &SDK.QueryInput{}
+func (r ScanRequest) ToInput() (*SDK.ScanInput, error) {
+	in := &SDK.ScanInput{}
 
 	if r.TableName != "" {
 		in.TableName = pointers.String(r.TableName)
@@ -86,17 +85,6 @@ func (r QueryRequest) ToInput() (*SDK.QueryInput, error) {
 	if r.IndexName != "" {
 		in.IndexName = pointers.String(r.IndexName)
 	}
-	if r.KeyConditionExpression != "" {
-		in.KeyConditionExpression = pointers.String(r.KeyConditionExpression)
-	}
-
-	if len(r.KeyConditions) != 0 {
-		m := make(map[string]SDK.Condition, len(r.KeyConditions))
-		for key, val := range r.KeyConditions {
-			m[key] = val.ToSDK()
-		}
-		in.KeyConditions = m
-	}
 
 	if r.Limit != 0 {
 		in.Limit = pointers.Long64(r.Limit)
@@ -106,10 +94,6 @@ func (r QueryRequest) ToInput() (*SDK.QueryInput, error) {
 	}
 
 	in.ReturnConsumedCapacity = SDK.ReturnConsumedCapacity(r.ReturnConsumedCapacity)
-
-	if r.ScanIndexForward {
-		in.ScanIndexForward = pointers.Bool(r.ScanIndexForward)
-	}
 
 	in.Select = SDK.Select(r.Select)
 
@@ -121,14 +105,13 @@ func (r QueryRequest) ToInput() (*SDK.QueryInput, error) {
 		in.ExpressionAttributeNames = expr.Names()
 		in.ExpressionAttributeValues = expr.Values()
 		in.FilterExpression = expr.Filter()
-		in.KeyConditionExpression = expr.KeyCondition()
 		in.ProjectionExpression = expr.Projection()
 	}
 	return in, nil
 }
 
-// QueryResult contains results from `Query` operation.
-type QueryResult struct {
+// ScanResult contains results from `Scan` operation.
+type ScanResult struct {
 	ConsumedCapacity ConsumedCapacity
 	Count            int64
 	Items            []map[string]SDK.AttributeValue // keep original type to reduce unmarshal cost
@@ -136,8 +119,8 @@ type QueryResult struct {
 	ScannedCount     int64
 }
 
-func NewQueryResult(output *SDK.QueryResponse) *QueryResult {
-	r := &QueryResult{}
+func NewScanResult(output *SDK.ScanResponse) *ScanResult {
+	r := &ScanResult{}
 	if output == nil {
 		return r
 	}
@@ -159,10 +142,10 @@ func NewQueryResult(output *SDK.QueryResponse) *QueryResult {
 	return r
 }
 
-func (r QueryResult) ToSliceMap() ([]map[string]interface{}, error) {
+func (r ScanResult) ToSliceMap() ([]map[string]interface{}, error) {
 	return ToSliceMapValues(r.Items), nil
 }
 
-func (r QueryResult) Unmarshal(out interface{}) error {
+func (r ScanResult) Unmarshal(out interface{}) error {
 	return RawUnmarshalAttributeValues(r.Items, out)
 }
