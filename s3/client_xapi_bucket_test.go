@@ -13,18 +13,17 @@ func TestClientXAPIBucket(t *testing.T) {
 	svc := getTestClient(t)
 
 	t.Run("XCreateBucketFromName", func(t *testing.T) {
-		_ = svc.XDeleteBucketFromName(ctx, testPutBucketName)
+		_ = svc.XForceDeleteBucketFromName(ctx, testPutBucketName)
 		res, err := svc.XCreateBucketFromName(ctx, testPutBucketName)
-		is.NoErr(err)              // success creation
-		is.Equal(res.Location, "") // empty value on FakeS3
+		is.NoErr(err) // success creation
+		is.Equal(res.Location, "/test-put-bucket")
 
 		_, err = svc.XCreateBucketFromName(ctx, testPutBucketName)
-		// is.True(err != nil) // already created bucket
-		is.NoErr(err) // already created bucket does not error on FakeS3
+		is.True(err != nil) // already created bucket
 	})
 
 	t.Run("XDeleteBucketFromName", func(t *testing.T) {
-		_ = svc.XDeleteBucketFromName(ctx, testPutBucketName)
+		_ = svc.XForceDeleteBucketFromName(ctx, testPutBucketName)
 		_, _ = svc.XCreateBucketFromName(ctx, testPutBucketName)
 
 		err := svc.XDeleteBucketFromName(ctx, testPutBucketName)
@@ -34,7 +33,7 @@ func TestClientXAPIBucket(t *testing.T) {
 		is.True(err != nil) // already deleted bucket
 	})
 	t.Run("XExistBucket", func(t *testing.T) {
-		_ = svc.XDeleteBucketFromName(ctx, testPutBucketName)
+		_ = svc.XForceDeleteBucketFromName(ctx, testPutBucketName)
 
 		ok, err := svc.XExistBucket(ctx, testPutBucketName)
 		is.True(!ok)

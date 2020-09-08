@@ -59,6 +59,7 @@ func main() {
 |:--|:--|
 | `XCreateBucketFromName` | creates a bucket. |
 | `XDeleteBucketFromName` | deletes a bucket. |
+| `XDeleteAllObjects` | deletes all of objects in the bucket. |
 | `XDeleteObjectFromPath` | deletes an object. |
 | `XExistBucket` | checks if the bucket already exists or not. |
 | `XExistObject` | checks if the object exists or not. |

@@ -24,3 +24,13 @@ func (svc *S3) XExistBucket(ctx context.Context, name string) (bool, error) {
 		Bucket: name,
 	})
 }
+
+// XForceDeleteBucketFromName deletes a bucket with deleting all of objects.
+func (svc *S3) XForceDeleteBucketFromName(ctx context.Context, name string) error {
+	_, err := svc.XDeleteAllObjects(ctx, name)
+	if err != nil {
+		return err
+	}
+
+	return svc.XDeleteBucketFromName(ctx, name)
+}

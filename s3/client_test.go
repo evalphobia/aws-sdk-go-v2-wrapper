@@ -59,8 +59,9 @@ func TestSetLogger(t *testing.T) {
 
 func getTestConfig() config.Config {
 	return config.Config{
-		AccessKey:        "access",
-		SecretKey:        "secret",
+		// creds for minio
+		AccessKey:        "dummy",
+		SecretKey:        "dummydummy",
 		CommonEndpoint:   defaultEndpoint,
 		S3ForcePathStyle: true,
 	}
