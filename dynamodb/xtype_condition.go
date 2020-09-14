@@ -21,6 +21,7 @@ func (x XConditions) hasValue() bool {
 	case len(x.KeyConditions) != 0,
 		len(x.Conditions) != 0,
 		len(x.Filters) != 0,
+		len(x.Updates) != 0,
 		len(x.Projections) != 0:
 		return true
 	}
