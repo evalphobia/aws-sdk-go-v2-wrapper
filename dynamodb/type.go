@@ -91,8 +91,17 @@ type AttributeValue struct {
 	HasNumber bool
 }
 
-// MustNewAttributeValue creates AttributeValue from given value.
+// MustNewAttributeValue creates AttributeValue from given value, or emits panic.
 func MustNewAttributeValue(v interface{}) AttributeValue {
+	result, err := NewAttributeValue(v)
+	if err != nil {
+		panic(err)
+	}
+	return result
+}
+
+// NewAttributeValue creates AttributeValue from given value.
+func NewAttributeValue(v interface{}) (AttributeValue, error) {
 	result := AttributeValue{}
 
 	switch vv := v.(type) {
@@ -135,11 +144,11 @@ func MustNewAttributeValue(v interface{}) AttributeValue {
 	default:
 		if v == nil {
 			result.Null = true
-			return result
+			return result, nil
 		}
-		panic(fmt.Sprintf("[MustNewAttributeValue] cannot parse the given value type: [%t]", v))
+		return result, fmt.Errorf("[MustNewAttributeValue] cannot parse the given value type: [%t]", v)
 	}
-	return result
+	return result, nil
 }
 
 func newAttributeValue(o SDK.AttributeValue) AttributeValue {
