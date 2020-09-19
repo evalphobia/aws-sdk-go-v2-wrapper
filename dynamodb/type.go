@@ -1,6 +1,7 @@
 package dynamodb
 
 import (
+	"fmt"
 	"strconv"
 	"time"
 
@@ -88,6 +89,57 @@ type AttributeValue struct {
 	Bool      bool
 	HasBool   bool
 	HasNumber bool
+}
+
+// MustNewAttributeValue creates AttributeValue from given value.
+func MustNewAttributeValue(v interface{}) AttributeValue {
+	result := AttributeValue{}
+
+	switch vv := v.(type) {
+	case []byte:
+		result.Binary = vv
+	case [][]byte:
+		result.BinarySet = vv
+	case string:
+		result.String = vv
+	case []string:
+		result.StringSet = vv
+	case bool:
+		result.Bool = vv
+		result.HasBool = true
+	case int:
+		result.NumberInt = int64(vv)
+		result.HasNumber = true
+	case int32:
+		result.NumberInt = int64(vv)
+		result.HasNumber = true
+	case int64:
+		result.NumberInt = vv
+		result.HasNumber = true
+	case float32:
+		result.NumberFloat = float64(vv)
+		result.HasNumber = true
+	case float64:
+		result.NumberFloat = vv
+		result.HasNumber = true
+	case []int64:
+		result.NumberSetInt = vv
+	case []float64:
+		result.NumberSetFloat = vv
+	case map[string]interface{}:
+		m := make(map[string]AttributeValue, len(vv))
+		for k, v := range vv {
+			m[k] = MustNewAttributeValue(v)
+		}
+		result.Map = m
+	default:
+		if v == nil {
+			result.Null = true
+			return result
+		}
+		panic(fmt.Sprintf("[MustNewAttributeValue] cannot parse the given value type: [%t]", v))
+	}
+	return result
 }
 
 func newAttributeValue(o SDK.AttributeValue) AttributeValue {
