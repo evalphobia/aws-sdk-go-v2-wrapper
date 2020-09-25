@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"io"
+	"strings"
 	"time"
 
 	SDK "github.com/aws/aws-sdk-go-v2/service/s3"
@@ -61,6 +62,9 @@ type PutObjectRequest struct {
 	StorageClass              StorageClass
 	Tagging                   string
 	WebsiteRedirectLocation   string
+
+	// TaggingTagSet is used for tagging. this won't override `Tagging` and can be used together.
+	TaggingTagSet []Tag
 }
 
 func (r PutObjectRequest) ToInput() *SDK.PutObjectInput {
@@ -147,9 +151,21 @@ func (r PutObjectRequest) ToInput() *SDK.PutObjectInput {
 	in.ServerSideEncryption = SDK.ServerSideEncryption(r.ServerSideEncryption)
 	in.StorageClass = SDK.StorageClass(r.StorageClass)
 
-	if r.Tagging != "" {
-		in.Tagging = pointers.String(r.Tagging)
+	tags := r.Tagging
+	if len(r.TaggingTagSet) != 0 {
+		tt := make([]string, 0, len(r.TaggingTagSet))
+		if tags != "" {
+			tt = append(tt, tags)
+		}
+		for _, v := range r.TaggingTagSet {
+			tt = append(tt, v.Key+"="+v.Value)
+		}
+		tags = strings.Join(tt, "&")
 	}
+	if tags != "" {
+		in.Tagging = pointers.String(tags)
+	}
+
 	if r.WebsiteRedirectLocation != "" {
 		in.WebsiteRedirectLocation = pointers.String(r.WebsiteRedirectLocation)
 	}
