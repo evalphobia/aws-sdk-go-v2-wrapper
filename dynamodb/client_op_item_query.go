@@ -118,11 +118,21 @@ func (r QueryRequest) ToInput() (*SDK.QueryInput, error) {
 		if err != nil {
 			return nil, err
 		}
-		in.ExpressionAttributeNames = expr.Names()
-		in.ExpressionAttributeValues = expr.Values()
-		in.FilterExpression = expr.Filter()
-		in.KeyConditionExpression = expr.KeyCondition()
-		in.ProjectionExpression = expr.Projection()
+		if v := expr.Names(); v != nil {
+			in.ExpressionAttributeNames = v
+		}
+		if v := expr.Values(); v != nil {
+			in.ExpressionAttributeValues = v
+		}
+		if v := expr.Filter(); v != nil {
+			in.FilterExpression = v
+		}
+		if v := expr.KeyCondition(); v != nil {
+			in.KeyConditionExpression = v
+		}
+		if v := expr.Projection(); v != nil {
+			in.ProjectionExpression = v
+		}
 	}
 	return in, nil
 }
