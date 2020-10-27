@@ -33,7 +33,7 @@ func (t *DebugTransport) RoundTrip(req *http.Request) (*http.Response, error) {
 	ctx := context.WithValue(req.Context(), contextKeyRequestStart, time.Now())
 	req = req.WithContext(ctx)
 
-	num := rand.Int63()
+	num := rand.Int63() // #nosec G404 | this number is used only for debugging and readability
 	t.showDumpRequest(req, num)
 
 	resp, err := t.transport().RoundTrip(req)
