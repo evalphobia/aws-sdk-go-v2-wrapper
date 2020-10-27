@@ -1,6 +1,8 @@
 package config
 
 import (
+	"net/http"
+
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/aws/external"
 
@@ -36,6 +38,11 @@ type Config struct {
 
 	// Custom Function to wrap errors.
 	ErrWrap func(errors.ErrorData) error
+
+	// Custom HTTP Client
+	CustomHTTPClient *http.Client
+	// Showing req/resp data when `true` (Cannot use with CustomHTTPClient)
+	UseDebugRequest bool
 }
 
 // AWSConfig creates *aws.Config object from the fields.
@@ -56,6 +63,15 @@ func (c Config) AWSConfig() (aws.Config, error) {
 		cfg.EndpointResolver = aws.ResolveWithEndpointURL(c.CommonEndpoint)
 		cfg.DisableEndpointHostPrefix = true
 	}
+	switch {
+	case c.CustomHTTPClient != nil:
+		cfg.HTTPClient = c.CustomHTTPClient
+	case c.UseDebugRequest:
+		cfg.HTTPClient = &http.Client{
+			Transport: DefaultDebugTransport,
+		}
+	}
+
 	return cfg, nil
 }
 
