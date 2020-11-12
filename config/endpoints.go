@@ -7,6 +7,7 @@ type Endpoints struct {
 	EC2      string
 	KMS      string
 	S3       string
+	SSM      string
 }
 
 func (e Endpoints) HasDynamoDB() bool {
@@ -67,4 +68,19 @@ func (e Endpoints) GetS3() aws.ResolveWithEndpoint {
 		return aws.ResolveWithEndpointURL(envvar)
 	}
 	return aws.ResolveWithEndpointURL(e.S3)
+}
+
+func (e Endpoints) HasSSM() bool {
+	if e.SSM != "" {
+		return true
+	}
+	return EnvSSMEndpoint() != ""
+}
+
+func (e Endpoints) GetSSM() aws.ResolveWithEndpoint {
+	envvar := EnvSSMEndpoint()
+	if envvar != "" {
+		return aws.ResolveWithEndpointURL(envvar)
+	}
+	return aws.ResolveWithEndpointURL(e.SSM)
 }
