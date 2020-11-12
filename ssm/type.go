@@ -69,18 +69,6 @@ type ParameterHistory struct {
 	Version          int64
 }
 
-func newParameterHistoryList(list []*SDK.ParameterHistory) []ParameterHistory {
-	if len(list) == 0 {
-		return nil
-	}
-
-	results := make([]ParameterHistory, len(list))
-	for i, v := range list {
-		results[i] = newParameterHistory(v)
-	}
-	return results
-}
-
 func newParameterHistory(o *SDK.ParameterHistory) ParameterHistory {
 	result := ParameterHistory{}
 	if o == nil {

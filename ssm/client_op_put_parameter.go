@@ -28,7 +28,6 @@ func (svc *SSM) PutParameter(ctx context.Context, r PutParameterRequest) (*PutPa
 	})
 	svc.Errorf(err.Error())
 	return nil, err
-
 }
 
 // PutParameterRequest has parameters for `PutParameter` operation.
