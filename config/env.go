@@ -12,6 +12,7 @@ const (
 	envS3Endpoint       = "AWS_S3_ENDPOINT"
 	envSNSEndpoint      = "AWS_SNS_ENDPOINT"
 	envSQSEndpoint      = "AWS_SQS_ENDPOINT"
+	envSSMEndpoint      = "AWS_SSM_ENDPOINT"
 )
 
 // EnvRegion get region from env vars.
@@ -52,4 +53,9 @@ func EnvSNSEndpoint() string {
 // EnvSQSEndpoint get SQS endpoint from env vars.
 func EnvSQSEndpoint() string {
 	return os.Getenv(envSQSEndpoint)
+}
+
+// EnvSSMEndpoint get SSM endpoint from env vars.
+func EnvSSMEndpoint() string {
+	return os.Getenv(envSSMEndpoint)
 }

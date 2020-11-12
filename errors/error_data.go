@@ -27,7 +27,11 @@ func (e ErrorData) Error() string {
 }
 
 func (e ErrorData) GetAWSErrCode() string {
-	if aerr, ok := e.Err.(awserr.Error); ok {
+	return GetAWSErrorCode(e.Err)
+}
+
+func GetAWSErrorCode(err error) string {
+	if aerr, ok := err.(awserr.Error); ok {
 		return aerr.Code()
 	}
 	return ""
