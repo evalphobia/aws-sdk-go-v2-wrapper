@@ -20,8 +20,8 @@ jobs:
       id: go
     - name: setup env
       run: |
-        echo "::set-env name=GOPATH::$(go env GOPATH)"
-        echo "::add-path::$(go env GOPATH)/bin"
+        echo "GOPATH=$(go env GOPATH)" >> $GITHUB_ENV
+        echo "$(go env GOPATH)/bin" >> $GITHUB_PATH
       shell: bash
     - name: Check out code
       uses: actions/checkout@v2
@@ -37,9 +37,9 @@ jobs:
     - name: Check out code
       uses: actions/checkout@v2
     - name: Lint
-      uses: golangci/golangci-lint-action@v1
+      uses: golangci/golangci-lint-action@v2
       with:
-        version: v1.31
+        version: v1.32
         args: >-
           -E gofmt
           -E golint
