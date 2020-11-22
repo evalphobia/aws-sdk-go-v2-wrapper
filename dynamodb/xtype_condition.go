@@ -246,7 +246,7 @@ func (x XUpdateCondition) updateConditionSet(b expression.UpdateBuilder) express
 	case SetTypeListAppend:
 		return b.Set(name, expression.ListAppend(value, expression.Value(x.SetTypeValue2)))
 	case SetTypeIfNotExists:
-		return b.Set(name, expression.IfNotExists(expression.Name(x.SetTypeKey), expression.Value(x.SetTypeValue2)))
+		return b.Set(name, expression.IfNotExists(expression.Name(x.SetTypeKey), value))
 	default:
 		return b.Set(name, value)
 	}
