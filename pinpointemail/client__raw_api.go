@@ -16,6 +16,7 @@ func (svc *PinpointEmail) RawCreateConfigurationSetEventDestination(ctx context.
 	return svc.client.CreateConfigurationSetEventDestinationRequest(in).Send(ctx)
 }
 
+//nolint:golint
 // RawCreateDedicatedIpPool executes `CreateDedicatedIpPool` raw operation.
 func (svc *PinpointEmail) RawCreateDedicatedIpPool(ctx context.Context, in *SDK.CreateDedicatedIpPoolInput) (*SDK.CreateDedicatedIpPoolResponse, error) {
 	return svc.client.CreateDedicatedIpPoolRequest(in).Send(ctx)
@@ -41,6 +42,7 @@ func (svc *PinpointEmail) RawDeleteConfigurationSetEventDestination(ctx context.
 	return svc.client.DeleteConfigurationSetEventDestinationRequest(in).Send(ctx)
 }
 
+//nolint:golint
 // RawDeleteDedicatedIpPool executes `DeleteDedicatedIpPool` raw operation.
 func (svc *PinpointEmail) RawDeleteDedicatedIpPool(ctx context.Context, in *SDK.DeleteDedicatedIpPoolInput) (*SDK.DeleteDedicatedIpPoolResponse, error) {
 	return svc.client.DeleteDedicatedIpPoolRequest(in).Send(ctx)
@@ -71,6 +73,7 @@ func (svc *PinpointEmail) RawGetConfigurationSetEventDestinations(ctx context.Co
 	return svc.client.GetConfigurationSetEventDestinationsRequest(in).Send(ctx)
 }
 
+//nolint:golint
 // RawGetDedicatedIp executes `GetDedicatedIp` raw operation.
 func (svc *PinpointEmail) RawGetDedicatedIp(ctx context.Context, in *SDK.GetDedicatedIpInput) (*SDK.GetDedicatedIpResponse, error) {
 	return svc.client.GetDedicatedIpRequest(in).Send(ctx)
@@ -111,6 +114,7 @@ func (svc *PinpointEmail) RawListConfigurationSets(ctx context.Context, in *SDK.
 	return svc.client.ListConfigurationSetsRequest(in).Send(ctx)
 }
 
+//nolint:golint
 // RawListDedicatedIpPools executes `ListDedicatedIpPools` raw operation.
 func (svc *PinpointEmail) RawListDedicatedIpPools(ctx context.Context, in *SDK.ListDedicatedIpPoolsInput) (*SDK.ListDedicatedIpPoolsResponse, error) {
 	return svc.client.ListDedicatedIpPoolsRequest(in).Send(ctx)
@@ -136,6 +140,7 @@ func (svc *PinpointEmail) RawListTagsForResource(ctx context.Context, in *SDK.Li
 	return svc.client.ListTagsForResourceRequest(in).Send(ctx)
 }
 
+//nolint:golint
 // RawPutAccountDedicatedIpWarmupAttributes executes `PutAccountDedicatedIpWarmupAttributes` raw operation.
 func (svc *PinpointEmail) RawPutAccountDedicatedIpWarmupAttributes(ctx context.Context, in *SDK.PutAccountDedicatedIpWarmupAttributesInput) (*SDK.PutAccountDedicatedIpWarmupAttributesResponse, error) {
 	return svc.client.PutAccountDedicatedIpWarmupAttributesRequest(in).Send(ctx)
@@ -166,11 +171,13 @@ func (svc *PinpointEmail) RawPutConfigurationSetTrackingOptions(ctx context.Cont
 	return svc.client.PutConfigurationSetTrackingOptionsRequest(in).Send(ctx)
 }
 
+//nolint:golint
 // RawPutDedicatedIpInPool executes `PutDedicatedIpInPool` raw operation.
 func (svc *PinpointEmail) RawPutDedicatedIpInPool(ctx context.Context, in *SDK.PutDedicatedIpInPoolInput) (*SDK.PutDedicatedIpInPoolResponse, error) {
 	return svc.client.PutDedicatedIpInPoolRequest(in).Send(ctx)
 }
 
+//nolint:golint
 // RawPutDedicatedIpWarmupAttributes executes `PutDedicatedIpWarmupAttributes` raw operation.
 func (svc *PinpointEmail) RawPutDedicatedIpWarmupAttributes(ctx context.Context, in *SDK.PutDedicatedIpWarmupAttributesInput) (*SDK.PutDedicatedIpWarmupAttributesResponse, error) {
 	return svc.client.PutDedicatedIpWarmupAttributesRequest(in).Send(ctx)
