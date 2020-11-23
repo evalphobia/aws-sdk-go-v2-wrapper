@@ -5,14 +5,15 @@ import "os"
 const (
 	envRegion = "AWS_REGION"
 
-	envEndpoint         = "AWS_ENDPOINT"
-	envDynamoDBEndpoint = "AWS_DYNAMODB_ENDPOINT"
-	envEC2Endpoint      = "AWS_EC2_ENDPOINT"
-	envKMSEndpoint      = "AWS_KMS_ENDPOINT"
-	envS3Endpoint       = "AWS_S3_ENDPOINT"
-	envSNSEndpoint      = "AWS_SNS_ENDPOINT"
-	envSQSEndpoint      = "AWS_SQS_ENDPOINT"
-	envSSMEndpoint      = "AWS_SSM_ENDPOINT"
+	envEndpoint              = "AWS_ENDPOINT"
+	envDynamoDBEndpoint      = "AWS_DYNAMODB_ENDPOINT"
+	envEC2Endpoint           = "AWS_EC2_ENDPOINT"
+	envKMSEndpoint           = "AWS_KMS_ENDPOINT"
+	envPinpointEmailEndpoint = "AWS_PINPOINT_EMAIN_ENDPOINT"
+	envS3Endpoint            = "AWS_S3_ENDPOINT"
+	envSNSEndpoint           = "AWS_SNS_ENDPOINT"
+	envSQSEndpoint           = "AWS_SQS_ENDPOINT"
+	envSSMEndpoint           = "AWS_SSM_ENDPOINT"
 )
 
 // EnvRegion get region from env vars.
@@ -33,6 +34,11 @@ func EnvDynamoDBEndpoint() string {
 // EnvEC2Endpoint get EC2 endpoint from env vars.
 func EnvEC2Endpoint() string {
 	return os.Getenv(envEC2Endpoint)
+}
+
+// EnvPinpointEmailEndpoint get PinpointEmail endpoint from env vars.
+func EnvPinpointEmailEndpoint() string {
+	return os.Getenv(envPinpointEmailEndpoint)
 }
 
 // EnvKMSEndpoint get KMS endpoint from env vars.

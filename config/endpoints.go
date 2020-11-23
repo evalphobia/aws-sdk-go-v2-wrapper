@@ -3,11 +3,12 @@ package config
 import "github.com/aws/aws-sdk-go-v2/aws"
 
 type Endpoints struct {
-	DynamoDB string
-	EC2      string
-	KMS      string
-	S3       string
-	SSM      string
+	DynamoDB      string
+	EC2           string
+	KMS           string
+	PinpointEmail string
+	S3            string
+	SSM           string
 }
 
 func (e Endpoints) HasDynamoDB() bool {
@@ -38,6 +39,21 @@ func (e Endpoints) GetEC2() aws.ResolveWithEndpoint {
 		return aws.ResolveWithEndpointURL(envvar)
 	}
 	return aws.ResolveWithEndpointURL(e.EC2)
+}
+
+func (e Endpoints) HasPinpointEmail() bool {
+	if e.PinpointEmail != "" {
+		return true
+	}
+	return EnvPinpointEmailEndpoint() != ""
+}
+
+func (e Endpoints) GetPinpointEmail() aws.ResolveWithEndpoint {
+	envvar := EnvPinpointEmailEndpoint()
+	if envvar != "" {
+		return aws.ResolveWithEndpointURL(envvar)
+	}
+	return aws.ResolveWithEndpointURL(e.PinpointEmail)
 }
 
 func (e Endpoints) HasKMS() bool {

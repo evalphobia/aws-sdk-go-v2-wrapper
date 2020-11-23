@@ -78,7 +78,9 @@ aws-sdk-go-v2-wrapper provides three types of APIs.
 |:--|
 | [dynamodb](/dynamodb) |
 | [kms](/kms) |
+| [pinpointemail](/pinpointemail) |
 | [s3](/s3) |
+| [ssm](/ssm) |
 
 ## Environment variables
 
