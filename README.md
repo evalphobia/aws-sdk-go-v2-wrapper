@@ -61,6 +61,8 @@ AWS SDK provides solid and rubust APIs. But sometimes it's very painful for me, 
 I don't know it's useful for others.
 It might helpful to just see these codes to know how to use [aws-sdk-go-v2](https://github.com/aws/aws-sdk-go-v2) SDK besides official example test code.
 
+(* Target version: [v0.24.0](https://github.com/aws/aws-sdk-go-v2/tree/v0.24.0) on 2020-07-21)
+
 
 ## APIs
 
@@ -76,6 +78,7 @@ aws-sdk-go-v2-wrapper provides three types of APIs.
 
 | Name |
 |:--|
+| [cloudwatchlogs](/cloudwatchlogs) |
 | [dynamodb](/dynamodb) |
 | [kms](/kms) |
 | [pinpointemail](/pinpointemail) |
@@ -88,9 +91,12 @@ aws-sdk-go-v2-wrapper provides three types of APIs.
 |:--|:--|
 | `AWS_REGION` | Default AWS region for clients. |
 | `AWS_ENDPOINT` | Default endpoints for clients. |
+| `AWS_CLOUDWATCH_LOGS_ENDPOINT` | Custom endpoint for Cloudwatch Logs client. |
 | `AWS_DYNAMODB_ENDPOINT` | Custom endpoint for DynamoDB client. |
 | `AWS_KMS_ENDPOINT` | Custom endpoint for KMS client. |
-| `AWS_S3_ENDPOINT` | Custom endpoint for s3 client. |
+| `AWS_PINPOINT_EMAIL_ENDPOINT` | Custom endpoint for PinpointEmail client. |
+| `AWS_S3_ENDPOINT` | Custom endpoint for S3 client. |
+| `AWS_SSM_ENDPOINT` | Custom endpoint for SSM client. |
 
 Besides above, supported some values from [official env_config](https://github.com/aws/aws-sdk-go-v2/blob/master/aws/external/env_config.go)
 
