@@ -54,7 +54,7 @@ type XQueryResultsRequest struct {
 	LogGroupName  string
 	LogGroupNames []string
 
-	// extention
+	// extension
 	MaxRetry int         // default=5
 	WaitFunc func(i int) // waiting strategy, default=exponential backoff from 1sec
 
