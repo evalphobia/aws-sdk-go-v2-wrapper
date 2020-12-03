@@ -3,12 +3,28 @@ package config
 import "github.com/aws/aws-sdk-go-v2/aws"
 
 type Endpoints struct {
-	DynamoDB      string
-	EC2           string
-	KMS           string
-	PinpointEmail string
-	S3            string
-	SSM           string
+	CloudwatchLogs string
+	DynamoDB       string
+	EC2            string
+	KMS            string
+	PinpointEmail  string
+	S3             string
+	SSM            string
+}
+
+func (e Endpoints) HasCloudwatchLogs() bool {
+	if e.CloudwatchLogs != "" {
+		return true
+	}
+	return EnvCloudwatchLogsEndpoint() != ""
+}
+
+func (e Endpoints) GetCloudwatchLogs() aws.ResolveWithEndpoint {
+	envvar := EnvCloudwatchLogsEndpoint()
+	if envvar != "" {
+		return aws.ResolveWithEndpointURL(envvar)
+	}
+	return aws.ResolveWithEndpointURL(e.CloudwatchLogs)
 }
 
 func (e Endpoints) HasDynamoDB() bool {

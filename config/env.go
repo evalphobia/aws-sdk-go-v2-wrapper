@@ -5,15 +5,16 @@ import "os"
 const (
 	envRegion = "AWS_REGION"
 
-	envEndpoint              = "AWS_ENDPOINT"
-	envDynamoDBEndpoint      = "AWS_DYNAMODB_ENDPOINT"
-	envEC2Endpoint           = "AWS_EC2_ENDPOINT"
-	envKMSEndpoint           = "AWS_KMS_ENDPOINT"
-	envPinpointEmailEndpoint = "AWS_PINPOINT_EMAIN_ENDPOINT"
-	envS3Endpoint            = "AWS_S3_ENDPOINT"
-	envSNSEndpoint           = "AWS_SNS_ENDPOINT"
-	envSQSEndpoint           = "AWS_SQS_ENDPOINT"
-	envSSMEndpoint           = "AWS_SSM_ENDPOINT"
+	envEndpoint               = "AWS_ENDPOINT"
+	envCloudwatchLogsEndpoint = "AWS_CLOUDWATCH_LOGS_ENDPOINT"
+	envDynamoDBEndpoint       = "AWS_DYNAMODB_ENDPOINT"
+	envEC2Endpoint            = "AWS_EC2_ENDPOINT"
+	envKMSEndpoint            = "AWS_KMS_ENDPOINT"
+	envPinpointEmailEndpoint  = "AWS_PINPOINT_EMAIL_ENDPOINT"
+	envS3Endpoint             = "AWS_S3_ENDPOINT"
+	envSNSEndpoint            = "AWS_SNS_ENDPOINT"
+	envSQSEndpoint            = "AWS_SQS_ENDPOINT"
+	envSSMEndpoint            = "AWS_SSM_ENDPOINT"
 )
 
 // EnvRegion get region from env vars.
@@ -24,6 +25,11 @@ func EnvRegion() string {
 // EnvEndpoint get endpoint from env vars.
 func EnvEndpoint() string {
 	return os.Getenv(envEndpoint)
+}
+
+// EnvCloudwatchLogsEndpoint get CloudwatchLogs endpoint from env vars.
+func EnvCloudwatchLogsEndpoint() string {
+	return os.Getenv(envCloudwatchLogsEndpoint)
 }
 
 // EnvDynamoDBEndpoint get DynamoDB endpoint from env vars.
