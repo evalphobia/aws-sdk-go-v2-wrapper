@@ -3,6 +3,7 @@ package config
 import "github.com/aws/aws-sdk-go-v2/aws"
 
 type Endpoints struct {
+	Athena         string
 	CloudwatchLogs string
 	DynamoDB       string
 	EC2            string
@@ -10,6 +11,21 @@ type Endpoints struct {
 	PinpointEmail  string
 	S3             string
 	SSM            string
+}
+
+func (e Endpoints) HasAthena() bool {
+	if e.Athena != "" {
+		return true
+	}
+	return EnvAthenaEndpoint() != ""
+}
+
+func (e Endpoints) GetAthena() aws.ResolveWithEndpoint {
+	envvar := EnvAthenaEndpoint()
+	if envvar != "" {
+		return aws.ResolveWithEndpointURL(envvar)
+	}
+	return aws.ResolveWithEndpointURL(e.Athena)
 }
 
 func (e Endpoints) HasCloudwatchLogs() bool {

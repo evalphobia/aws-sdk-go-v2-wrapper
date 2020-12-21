@@ -78,6 +78,7 @@ aws-sdk-go-v2-wrapper provides three types of APIs.
 
 | Name |
 |:--|
+| [athena](/athena) |
 | [cloudwatchlogs](/cloudwatchlogs) |
 | [dynamodb](/dynamodb) |
 | [kms](/kms) |
@@ -91,6 +92,7 @@ aws-sdk-go-v2-wrapper provides three types of APIs.
 |:--|:--|
 | `AWS_REGION` | Default AWS region for clients. |
 | `AWS_ENDPOINT` | Default endpoints for clients. |
+| `AWS_ATHENA_ENDPOINT` | Custom endpoint for Athena client. |
 | `AWS_CLOUDWATCH_LOGS_ENDPOINT` | Custom endpoint for Cloudwatch Logs client. |
 | `AWS_DYNAMODB_ENDPOINT` | Custom endpoint for DynamoDB client. |
 | `AWS_KMS_ENDPOINT` | Custom endpoint for KMS client. |
