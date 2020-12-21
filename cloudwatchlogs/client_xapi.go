@@ -15,7 +15,7 @@ const (
 var defaultWaitFunc = func(i int) {
 	const initialWaitSec = 1
 	expo := math.Pow(2, float64(i)) * initialWaitSec
-	time.Sleep(time.Duration(rand.Float64()*expo) * time.Second)
+	time.Sleep(time.Duration(rand.Float64()*expo) * time.Second) // #nosec G404
 }
 
 // XQueryResults executes a query and waits for fetching complete results.
