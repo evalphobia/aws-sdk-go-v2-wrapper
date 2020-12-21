@@ -3,6 +3,8 @@ package cloudwatchlogs
 import (
 	"context"
 	"fmt"
+	"math"
+	"math/rand"
 	"time"
 )
 
@@ -11,7 +13,9 @@ const (
 )
 
 var defaultWaitFunc = func(i int) {
-	time.Sleep(time.Duration(i) * time.Second)
+	const initialWaitSec = 1
+	expo := math.Pow(2, float64(i)) * initialWaitSec
+	time.Sleep(time.Duration(rand.Float64()*expo) * time.Second) // #nosec G404
 }
 
 // XQueryResults executes a query and waits for fetching complete results.
@@ -56,13 +60,12 @@ type XQueryResultsRequest struct {
 
 	// extension
 	MaxRetry int         // default=5
-	WaitFunc func(i int) // waiting strategy, default=exponential backoff from 1sec
-
+	WaitFunc func(i int) // waiting strategy, default=exponential backoff with full jitter from 1sec
 }
 
 func (svc *CloudwatchLogs) waitQueryResult(ctx context.Context, queryID string, maxRetry int, waitFn func(int)) (*GetQueryResultsResult, error) {
 	for i := 0; i < maxRetry; i++ {
-		waitFn(i + 1) // wait
+		waitFn(i) // wait
 
 		res, err := svc.GetQueryResults(ctx, GetQueryResultsRequest{
 			QueryID: queryID,
