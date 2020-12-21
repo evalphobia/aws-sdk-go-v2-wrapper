@@ -6,6 +6,7 @@ const (
 	envRegion = "AWS_REGION"
 
 	envEndpoint               = "AWS_ENDPOINT"
+	envAthenaEndpoint         = "AWS_ATHENA_ENDPOINT"
 	envCloudwatchLogsEndpoint = "AWS_CLOUDWATCH_LOGS_ENDPOINT"
 	envDynamoDBEndpoint       = "AWS_DYNAMODB_ENDPOINT"
 	envEC2Endpoint            = "AWS_EC2_ENDPOINT"
@@ -25,6 +26,11 @@ func EnvRegion() string {
 // EnvEndpoint get endpoint from env vars.
 func EnvEndpoint() string {
 	return os.Getenv(envEndpoint)
+}
+
+// EnvAthenaEndpoint get Athena endpoint from env vars.
+func EnvAthenaEndpoint() string {
+	return os.Getenv(envAthenaEndpoint)
 }
 
 // EnvCloudwatchLogsEndpoint get CloudwatchLogs endpoint from env vars.
