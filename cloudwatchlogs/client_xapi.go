@@ -65,7 +65,7 @@ type XQueryResultsRequest struct {
 
 func (svc *CloudwatchLogs) waitQueryResult(ctx context.Context, queryID string, maxRetry int, waitFn func(int)) (*GetQueryResultsResult, error) {
 	for i := 0; i < maxRetry; i++ {
-		waitFn(i + 1) // wait
+		waitFn(i) // wait
 
 		res, err := svc.GetQueryResults(ctx, GetQueryResultsRequest{
 			QueryID: queryID,
