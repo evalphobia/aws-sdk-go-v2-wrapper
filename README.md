@@ -84,6 +84,7 @@ aws-sdk-go-v2-wrapper provides three types of APIs.
 | [kms](/kms) |
 | [pinpointemail](/pinpointemail) |
 | [s3](/s3) |
+| [ses](/ses) |
 | [ssm](/ssm) |
 
 ## Environment variables
@@ -98,6 +99,7 @@ aws-sdk-go-v2-wrapper provides three types of APIs.
 | `AWS_KMS_ENDPOINT` | Custom endpoint for KMS client. |
 | `AWS_PINPOINT_EMAIL_ENDPOINT` | Custom endpoint for PinpointEmail client. |
 | `AWS_S3_ENDPOINT` | Custom endpoint for S3 client. |
+| `AWS_SES_ENDPOINT` | Custom endpoint for SES client. |
 | `AWS_SSM_ENDPOINT` | Custom endpoint for SSM client. |
 
 Besides above, supported some values from [official env_config](https://github.com/aws/aws-sdk-go-v2/blob/master/aws/external/env_config.go)
