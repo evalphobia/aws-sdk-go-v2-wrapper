@@ -13,6 +13,7 @@ const (
 	envKMSEndpoint            = "AWS_KMS_ENDPOINT"
 	envPinpointEmailEndpoint  = "AWS_PINPOINT_EMAIL_ENDPOINT"
 	envS3Endpoint             = "AWS_S3_ENDPOINT"
+	envSESEndpoint            = "AWS_SES_ENDPOINT"
 	envSNSEndpoint            = "AWS_SNS_ENDPOINT"
 	envSQSEndpoint            = "AWS_SQS_ENDPOINT"
 	envSSMEndpoint            = "AWS_SSM_ENDPOINT"
@@ -61,6 +62,11 @@ func EnvKMSEndpoint() string {
 // EnvS3Endpoint get S3 endpoint from env vars.
 func EnvS3Endpoint() string {
 	return os.Getenv(envS3Endpoint)
+}
+
+// EnvSESEndpoint get SES endpoint from env vars.
+func EnvSESEndpoint() string {
+	return os.Getenv(envSESEndpoint)
 }
 
 // EnvSNSEndpoint get SNS endpoint from env vars.
