@@ -31,11 +31,11 @@ type SendEmailRequest struct {
 	From string
 
 	// for text or html
-	Body           string
+	Body           string // for html email
 	BodyCharset    string
 	Subject        string
 	SubjectCharset string
-	UseHTML        bool
+	TextBody       string // if empty, body is used for HTML email
 
 	// for template
 	TemplateARN  string
@@ -93,19 +93,22 @@ func (r SendEmailRequest) ToInput() *SDK.SendEmailInput {
 		in.Content.Simple.Subject = &content
 	}
 
-	if r.Body != "" {
-		content := SDK.Content{
-			Data: pointers.String(r.Body),
-		}
-		if r.BodyCharset != "" {
-			content.Charset = pointers.String(r.BodyCharset)
-		}
-
+	if r.Body != "" || r.TextBody != "" {
 		body := SDK.Body{}
-		switch {
-		case r.UseHTML:
+		if r.Body != "" {
+			content := SDK.Content{}
+			content.Data = pointers.String(r.Body)
+			if r.BodyCharset != "" {
+				content.Charset = pointers.String(r.BodyCharset)
+			}
 			body.Html = &content
-		default:
+		}
+		if r.TextBody != "" {
+			content := SDK.Content{}
+			content.Data = pointers.String(r.TextBody)
+			if r.BodyCharset != "" {
+				content.Charset = pointers.String(r.BodyCharset)
+			}
 			body.Text = &content
 		}
 		in.Content.Simple.Body = &body
