@@ -31,7 +31,7 @@ type SendEmailRequest struct {
 	Subject        string
 	SubjectCharset string // optional
 
-	// Either HTMLBody or TextBody is requred
+	// Either HTMLBody or TextBody is required
 	HTMLBody    string
 	HTMLCharset string
 	TextBody    string
