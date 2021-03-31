@@ -305,6 +305,7 @@ func newTemplatesResponse(o *SDK.TemplatesResponse) TemplatesResponse {
 	if len(o.Item) != 0 {
 		list := make([]TemplateResponse, len(o.Item))
 		for i, v := range o.Item {
+			v := v
 			list[i] = newTemplateResponse(&v)
 		}
 		result.Item = list

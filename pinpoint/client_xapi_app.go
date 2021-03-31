@@ -23,7 +23,7 @@ func (svc *Pinpoint) XExistsApp(ctx context.Context, appID string) (bool, error)
 	return false, err
 }
 
-// XGetAppIDByName searchs app by name and returns its ID.
+// XGetAppIDByName searches app by name and returns its ID.
 func (svc *Pinpoint) XGetAppIDByName(ctx context.Context, appName string) (appID string, err error) {
 	nextToken := ""
 	for {

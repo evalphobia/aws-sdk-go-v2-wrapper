@@ -15,6 +15,7 @@ type AttributeDimension struct {
 func newAttributeDimensionMap(in map[string]SDK.AttributeDimension) map[string]AttributeDimension {
 	result := make(map[string]AttributeDimension, len(in))
 	for key, val := range in {
+		val := val
 		result[key] = newAttributeDimension(&val)
 	}
 	return result
@@ -286,6 +287,7 @@ func newCampaignResponse(o *SDK.CampaignResponse) CampaignResponse {
 	if len(o.AdditionalTreatments) != 0 {
 		list := make([]TreatmentResource, len(o.AdditionalTreatments))
 		for i, v := range o.AdditionalTreatments {
+			v := v
 			list[i] = newTreatmentResource(&v)
 		}
 		result.AdditionalTreatments = list
@@ -598,6 +600,7 @@ type MetricDimension struct {
 func newMetricDimensionMap(in map[string]SDK.MetricDimension) map[string]MetricDimension {
 	result := make(map[string]MetricDimension, len(in))
 	for key, val := range in {
+		val := val
 		result[key] = newMetricDimension(&val)
 	}
 	return result

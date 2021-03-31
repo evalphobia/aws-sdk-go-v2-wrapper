@@ -133,6 +133,7 @@ func newEndpointsResponse(o *SDK.EndpointsResponse) EndpointsResponse {
 	if len(o.Item) != 0 {
 		list := make([]EndpointResponse, len(o.Item))
 		for i, v := range o.Item {
+			v := v
 			list[i] = newEndpointResponse(&v)
 		}
 		result.Item = list

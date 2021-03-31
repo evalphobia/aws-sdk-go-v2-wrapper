@@ -58,6 +58,7 @@ func newImportJobsResponse(o *SDK.ImportJobsResponse) ImportJobsResponse {
 	if len(o.Item) != 0 {
 		list := make([]ImportJobResponse, len(o.Item))
 		for i, v := range o.Item {
+			v := v
 			list[i] = newImportJobResponse(&v)
 		}
 		result.Item = list

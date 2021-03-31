@@ -18,6 +18,7 @@ func newApplicationsResponse(o *SDK.ApplicationsResponse) ApplicationsResponse {
 	if len(o.Item) != 0 {
 		list := make([]ApplicationResponse, len(o.Item))
 		for i, v := range o.Item {
+			v := v
 			list[i] = newApplicationResponse(&v)
 		}
 		result.Item = list

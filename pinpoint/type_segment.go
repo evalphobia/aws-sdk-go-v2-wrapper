@@ -194,6 +194,7 @@ func newSegmentGroup(o *SDK.SegmentGroup) SegmentGroup {
 	if len(o.Dimensions) != 0 {
 		list := make([]SegmentDimensions, len(o.Dimensions))
 		for i, v := range o.Dimensions {
+			v := v
 			list[i] = newSegmentDimensions(&v)
 		}
 		result.Dimensions = list
@@ -202,6 +203,7 @@ func newSegmentGroup(o *SDK.SegmentGroup) SegmentGroup {
 	if len(o.SourceSegments) != 0 {
 		list := make([]SegmentReference, len(o.SourceSegments))
 		for i, v := range o.SourceSegments {
+			v := v
 			list[i] = newSegmentReference(&v)
 		}
 		result.SourceSegments = list
@@ -250,6 +252,7 @@ func newSegmentGroupList(o *SDK.SegmentGroupList) SegmentGroupList {
 	if len(o.Groups) != 0 {
 		list := make([]SegmentGroup, len(o.Groups))
 		for i, v := range o.Groups {
+			v := v
 			list[i] = newSegmentGroup(&v)
 		}
 		result.Groups = list
@@ -402,6 +405,7 @@ func newSegmentsResponse(o *SDK.SegmentsResponse) SegmentsResponse {
 	if len(o.Item) != 0 {
 		list := make([]SegmentResponse, len(o.Item))
 		for i, v := range o.Item {
+			v := v
 			list[i] = newSegmentResponse(&v)
 		}
 		result.Item = list
