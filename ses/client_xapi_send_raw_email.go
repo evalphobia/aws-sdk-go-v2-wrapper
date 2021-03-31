@@ -36,9 +36,9 @@ type XSendRawEmailRequest struct {
 
 	// optional
 	ConfigurationSetName string
-	FromArn              string
-	ReturnPathArn        string
-	SourceArn            string
+	FromARN              string
+	ReturnPathARN        string
+	SourceARN            string
 	Tags                 []MessageTag
 }
 
@@ -50,10 +50,10 @@ func (r XSendRawEmailRequest) ToRequest() (SendRawEmailRequest, error) {
 	req := SendRawEmailRequest{
 		ConfigurationSetName: r.ConfigurationSetName,
 		Destinations:         r.To,
-		FromArn:              r.FromArn,
-		ReturnPathArn:        r.ReturnPathArn,
+		FromARN:              r.FromARN,
+		ReturnPathARN:        r.ReturnPathARN,
 		Source:               r.From,
-		SourceArn:            r.SourceArn,
+		SourceARN:            r.SourceARN,
 		Tags:                 r.Tags,
 	}
 
