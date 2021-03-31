@@ -31,11 +31,12 @@ type SendEmailRequest struct {
 	From string
 
 	// for text or html
-	Body           string // for html email
-	BodyCharset    string
 	Subject        string
-	SubjectCharset string
-	TextBody       string // if empty, body is used for HTML email
+	SubjectCharset string // optional
+	HTMLBody       string
+	HTMLCharset    string // optional
+	TextBody       string
+	TextCharset    string // optional
 
 	// for template
 	TemplateARN  string
@@ -76,7 +77,7 @@ func (r SendEmailRequest) ToInput() *SDK.SendEmailInput {
 
 	switch {
 	case r.Subject != "",
-		r.Body != "":
+		r.HTMLBody != "":
 		if in.Content == nil {
 			in.Content = &SDK.EmailContent{}
 		}
@@ -93,21 +94,21 @@ func (r SendEmailRequest) ToInput() *SDK.SendEmailInput {
 		in.Content.Simple.Subject = &content
 	}
 
-	if r.Body != "" || r.TextBody != "" {
+	if r.HTMLBody != "" || r.TextBody != "" {
 		body := SDK.Body{}
-		if r.Body != "" {
+		if r.HTMLBody != "" {
 			content := SDK.Content{}
-			content.Data = pointers.String(r.Body)
-			if r.BodyCharset != "" {
-				content.Charset = pointers.String(r.BodyCharset)
+			content.Data = pointers.String(r.HTMLBody)
+			if r.HTMLCharset != "" {
+				content.Charset = pointers.String(r.HTMLCharset)
 			}
 			body.Html = &content
 		}
 		if r.TextBody != "" {
 			content := SDK.Content{}
 			content.Data = pointers.String(r.TextBody)
-			if r.BodyCharset != "" {
-				content.Charset = pointers.String(r.BodyCharset)
+			if r.TextCharset != "" {
+				content.Charset = pointers.String(r.TextCharset)
 			}
 			body.Text = &content
 		}

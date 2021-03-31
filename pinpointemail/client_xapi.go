@@ -17,7 +17,7 @@ func (svc *PinpointEmail) XSendEmailHTML(ctx context.Context, subject, body, fro
 func (svc *PinpointEmail) xSendEmail(ctx context.Context, subject, htmlBody, textBody, from string, to ...string) error {
 	_, err := svc.SendEmail(ctx, SendEmailRequest{
 		Subject:  subject,
-		Body:     htmlBody,
+		HTMLBody: htmlBody,
 		From:     from,
 		To:       to,
 		TextBody: textBody,
