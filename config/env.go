@@ -11,6 +11,7 @@ const (
 	envDynamoDBEndpoint       = "AWS_DYNAMODB_ENDPOINT"
 	envEC2Endpoint            = "AWS_EC2_ENDPOINT"
 	envKMSEndpoint            = "AWS_KMS_ENDPOINT"
+	envPinpointEndpoint       = "AWS_PINPOINT_ENDPOINT"
 	envPinpointEmailEndpoint  = "AWS_PINPOINT_EMAIL_ENDPOINT"
 	envS3Endpoint             = "AWS_S3_ENDPOINT"
 	envSESEndpoint            = "AWS_SES_ENDPOINT"
@@ -47,6 +48,11 @@ func EnvDynamoDBEndpoint() string {
 // EnvEC2Endpoint get EC2 endpoint from env vars.
 func EnvEC2Endpoint() string {
 	return os.Getenv(envEC2Endpoint)
+}
+
+// EnvPinpointEndpoint get Pinpoint endpoint from env vars.
+func EnvPinpointEndpoint() string {
+	return os.Getenv(envPinpointEndpoint)
 }
 
 // EnvPinpointEmailEndpoint get PinpointEmail endpoint from env vars.

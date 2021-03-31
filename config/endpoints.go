@@ -8,6 +8,7 @@ type Endpoints struct {
 	DynamoDB       string
 	EC2            string
 	KMS            string
+	Pinpoint       string
 	PinpointEmail  string
 	S3             string
 	SES            string
@@ -72,6 +73,21 @@ func (e Endpoints) GetEC2() aws.ResolveWithEndpoint {
 		return aws.ResolveWithEndpointURL(envvar)
 	}
 	return aws.ResolveWithEndpointURL(e.EC2)
+}
+
+func (e Endpoints) HasPinpoint() bool {
+	if e.Pinpoint != "" {
+		return true
+	}
+	return EnvPinpointEndpoint() != ""
+}
+
+func (e Endpoints) GetPinpoint() aws.ResolveWithEndpoint {
+	envvar := EnvPinpointEndpoint()
+	if envvar != "" {
+		return aws.ResolveWithEndpointURL(envvar)
+	}
+	return aws.ResolveWithEndpointURL(e.Pinpoint)
 }
 
 func (e Endpoints) HasPinpointEmail() bool {
