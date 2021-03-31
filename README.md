@@ -82,6 +82,7 @@ aws-sdk-go-v2-wrapper provides three types of APIs.
 | [cloudwatchlogs](/cloudwatchlogs) |
 | [dynamodb](/dynamodb) |
 | [kms](/kms) |
+| [pinpoint](/pinpoint) |
 | [pinpointemail](/pinpointemail) |
 | [s3](/s3) |
 | [ses](/ses) |
@@ -97,6 +98,7 @@ aws-sdk-go-v2-wrapper provides three types of APIs.
 | `AWS_CLOUDWATCH_LOGS_ENDPOINT` | Custom endpoint for Cloudwatch Logs client. |
 | `AWS_DYNAMODB_ENDPOINT` | Custom endpoint for DynamoDB client. |
 | `AWS_KMS_ENDPOINT` | Custom endpoint for KMS client. |
+| `AWS_PINPOINT_ENDPOINT` | Custom endpoint for Pinpoint client. |
 | `AWS_PINPOINT_EMAIL_ENDPOINT` | Custom endpoint for PinpointEmail client. |
 | `AWS_S3_ENDPOINT` | Custom endpoint for S3 client. |
 | `AWS_SES_ENDPOINT` | Custom endpoint for SES client. |
