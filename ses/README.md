@@ -23,6 +23,19 @@ func main() {
 	ctx := context.Background()
 
 
+	// text email
+	err = svc.XSendEmailText(ctx, "My email report", "I love you!", "example@example.com", "example@example.com")
+	if err != nil {
+		panic(err)
+	}
+
+	// HTML email
+	htmlBody := `<!DOCTYPE html><html lang="en"><body><p style="text-align: center;">I love you!</p></body></html>`
+	err = svc.XSendEmailHTML(ctx, "My email report", htmlBody, "example@example.com", "example@example.com")
+	if err != nil {
+		panic(err)
+	}
+
 	// send email with csv file
 	err = svc.XSendRawEmail(ctx, ses.XSendRawEmailRequest{
 		From:     "from@example.com",
@@ -50,4 +63,6 @@ func main() {
 
 | Name | Description |
 |:--|:--|
+| `XSendEmailHTML` | sends HTML type email. |
+| `XSendEmailText` | sends text type email. |
 | `XSendRawEmail` | sends email with easy option for attachment files. |

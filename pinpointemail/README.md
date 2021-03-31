@@ -13,7 +13,7 @@ import (
 )
 
 func main() {
-	svc, err := ssm.New(config.Config{
+	svc, err := pinpointemail.New(config.Config{
 		AccessKey: "<...>",
 		SecretKey: "<...>",
 	})
