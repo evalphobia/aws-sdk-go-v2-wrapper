@@ -6,53 +6,51 @@ import (
 	SDK "github.com/aws/aws-sdk-go-v2/service/ses"
 
 	"github.com/evalphobia/aws-sdk-go-v2-wrapper/errors"
-	"github.com/evalphobia/aws-sdk-go-v2-wrapper/private/pointers"
 )
 
-// TestRenderTemplate executes `TestRenderTemplate` operation.
-func (svc *SES) TestRenderTemplate(ctx context.Context, r TestRenderTemplateRequest) (*TestRenderTemplateResult, error) {
-	out, err := svc.RawTestRenderTemplate(ctx, r.ToInput())
+// GetSendQuota executes `GetSendQuota` operation.
+func (svc *SES) GetSendQuota(ctx context.Context, r GetSendQuotaRequest) (*GetSendQuotaResult, error) {
+	out, err := svc.RawGetSendQuota(ctx, r.ToInput())
 	if err != nil {
 		err = svc.errWrap(errors.ErrorData{
 			Err:          err,
-			AWSOperation: "TestRenderTemplate",
+			AWSOperation: "GetSendQuota",
 		})
 		svc.Errorf(err.Error())
 		return nil, err
 	}
-	return NewTestRenderTemplateResult(out), nil
+	return NewGetSendQuotaResult(out), nil
 }
 
-// TestRenderTemplateRequest has parameters for `TestRenderTemplate` operation.
-type TestRenderTemplateRequest struct {
-	TemplateData string
-	TemplateName string
+// GetSendQuotaRequest has parameters for `GetSendQuota` operation.
+type GetSendQuotaRequest struct {
 }
 
-func (r TestRenderTemplateRequest) ToInput() *SDK.TestRenderTemplateInput {
-	in := &SDK.TestRenderTemplateInput{}
-
-	if r.TemplateData != "" {
-		in.TemplateData = pointers.String(r.TemplateData)
-	}
-	if r.TemplateName != "" {
-		in.TemplateName = pointers.String(r.TemplateName)
-	}
+func (r GetSendQuotaRequest) ToInput() *SDK.GetSendQuotaInput {
+	in := &SDK.GetSendQuotaInput{}
 	return in
 }
 
-type TestRenderTemplateResult struct {
-	RenderedTemplate string
+type GetSendQuotaResult struct {
+	Max24HourSend   float64
+	MaxSendRate     float64
+	SentLast24Hours float64
 }
 
-func NewTestRenderTemplateResult(o *SDK.TestRenderTemplateResponse) *TestRenderTemplateResult {
-	result := &TestRenderTemplateResult{}
+func NewGetSendQuotaResult(o *SDK.GetSendQuotaResponse) *GetSendQuotaResult {
+	result := &GetSendQuotaResult{}
 	if o == nil {
 		return result
 	}
 
-	if o.RenderedTemplate != nil {
-		result.RenderedTemplate = *o.RenderedTemplate
+	if o.Max24HourSend != nil {
+		result.Max24HourSend = *o.Max24HourSend
+	}
+	if o.MaxSendRate != nil {
+		result.MaxSendRate = *o.MaxSendRate
+	}
+	if o.SentLast24Hours != nil {
+		result.SentLast24Hours = *o.SentLast24Hours
 	}
 	return result
 }
