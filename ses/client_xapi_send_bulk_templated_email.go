@@ -74,6 +74,7 @@ func (r XSendBulkTemplatedEmailRequest) ToRequest() (SendBulkTemplatedEmailReque
 		req.Destinations = list
 	}
 
+	req.DefaultTemplateData = "{}"
 	if len(r.DefaultTemplateData) != 0 {
 		b, err := json.Marshal(r.DefaultTemplateData)
 		if err != nil {
@@ -102,7 +103,8 @@ func (r XBulkEmailDestination) ToRequest() (BulkEmailDestination, error) {
 		},
 	}
 
-	if len(r.TemplateData) == 0 {
+	req.ReplacementTemplateData = "{}"
+	if len(r.TemplateData) != 0 {
 		b, err := json.Marshal(r.TemplateData)
 		if err != nil {
 			return req, err

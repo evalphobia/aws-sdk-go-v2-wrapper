@@ -1,6 +1,8 @@
 package ses
 
 import (
+	"time"
+
 	SDK "github.com/aws/aws-sdk-go-v2/service/ses"
 	"github.com/evalphobia/aws-sdk-go-v2-wrapper/private/pointers"
 )
@@ -92,4 +94,72 @@ func (r MessageTag) ToSDK() SDK.MessageTag {
 		o.Value = pointers.String(r.Value)
 	}
 	return o
+}
+
+type Template struct {
+	TemplateName string
+
+	// optional
+	HTMLPart    string
+	SubjectPart string
+	TextPart    string
+}
+
+func newTemplate(o *SDK.Template) Template {
+	result := Template{}
+	if o == nil {
+		return result
+	}
+
+	if o.TemplateName != nil {
+		result.TemplateName = *o.TemplateName
+	}
+	if o.HtmlPart != nil {
+		result.HTMLPart = *o.HtmlPart
+	}
+	if o.SubjectPart != nil {
+		result.SubjectPart = *o.SubjectPart
+	}
+	if o.TextPart != nil {
+		result.TextPart = *o.TextPart
+	}
+	return result
+}
+
+func (r Template) ToSDK() *SDK.Template {
+	o := SDK.Template{}
+
+	if r.TemplateName != "" {
+		o.TemplateName = pointers.String(r.TemplateName)
+	}
+	if r.HTMLPart != "" {
+		o.HtmlPart = pointers.String(r.HTMLPart)
+	}
+	if r.SubjectPart != "" {
+		o.SubjectPart = pointers.String(r.SubjectPart)
+	}
+	if r.TextPart != "" {
+		o.TextPart = pointers.String(r.TextPart)
+	}
+	return &o
+}
+
+type TemplateMetadata struct {
+	CreatedTimestamp time.Time
+	Name             string
+}
+
+func newTemplateMetadata(o *SDK.TemplateMetadata) TemplateMetadata {
+	result := TemplateMetadata{}
+	if o == nil {
+		return result
+	}
+
+	if o.CreatedTimestamp != nil {
+		result.CreatedTimestamp = *o.CreatedTimestamp
+	}
+	if o.Name != nil {
+		result.Name = *o.Name
+	}
+	return result
 }
