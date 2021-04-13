@@ -63,6 +63,7 @@ func main() {
 
 | Name | Description |
 |:--|:--|
+| `XCreateTemplate` | creates an email template. |
 | `XSendBulkTemplatedEmail` | sends bulk emails using a template. |
 | `XSendEmailHTML` | sends HTML type email. |
 | `XSendEmailText` | sends text type email. |
