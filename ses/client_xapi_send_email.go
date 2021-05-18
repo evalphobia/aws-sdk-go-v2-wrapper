@@ -19,10 +19,11 @@ func (svc *SES) xSendEmail(ctx context.Context, subject, htmlBody, textBody, fro
 		Destination: Destination{
 			ToAddresses: to,
 		},
-		Source:   from,
-		Subject:  subject,
-		HTMLBody: htmlBody,
-		TextBody: textBody,
+		Source:               from,
+		Subject:              subject,
+		HTMLBody:             htmlBody,
+		TextBody:             textBody,
+		ConfigurationSetName: svc.defaultConfigurationSet,
 	})
 	return err
 }

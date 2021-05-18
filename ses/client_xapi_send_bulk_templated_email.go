@@ -12,12 +12,15 @@ func (svc *SES) XSendBulkTemplatedEmail(ctx context.Context, r XSendBulkTemplate
 	if err != nil {
 		return nil, err
 	}
+	if req.ConfigurationSetName != "" {
+		req.ConfigurationSetName = svc.defaultConfigurationSet
+	}
 
 	return svc.SendBulkTemplatedEmail(ctx, req)
 }
 
 // XSendBulkTemplatedEmailEachList sends bulk template emails.
-func (svc *SES) XSendBulkTemplatedEmailEachList(ctx context.Context, template, from string, to []string, templateData []map[string]interface{}) (*SendBulkTemplatedEmailResult, error) {
+func (svc *SES) XSendBulkTemplatedEmailEachList(ctx context.Context, template, from string, to []string, templateData []map[string]interface{}, tags []map[string]string) (*SendBulkTemplatedEmailResult, error) {
 	if len(templateData) != 0 && len(to) != len(templateData) {
 		return nil, fmt.Errorf("list size does not mutch: to:[%d], status:[%d]", len(to), len(templateData))
 	}
@@ -27,39 +30,50 @@ func (svc *SES) XSendBulkTemplatedEmailEachList(ctx context.Context, template, f
 		Template: template,
 	}
 
-	if len(to) != 0 {
-		list := make([]XBulkEmailDestination, len(to))
-		useTemplateData := len(templateData) != 0
-		for i := range to {
-			v := XBulkEmailDestination{
-				To: []string{to[i]},
-			}
-			if useTemplateData {
-				v.TemplateData = templateData[i]
-			}
-			list[i] = v
-		}
-		req.Destinations = list
-	}
-
+	req.Destinations = NewXBulkEmailDestinationList(to, templateData, tags)
 	return svc.XSendBulkTemplatedEmail(ctx, req)
 }
 
 // XSendBulkTemplatedEmailRequest has parameters for `XSendBulkTemplatedEmail` function.
 type XSendBulkTemplatedEmailRequest struct {
-	Destinations []XBulkEmailDestination
-	From         string
-	Template     string
+	Destinations         []XBulkEmailDestination
+	From                 string
+	Template             string
+	ConfigurationSetName string
 
 	// optional
 	DefaultTemplateData map[string]interface{}
+	DefaultTags         map[string]string
+}
+
+// NewXBulkEmailDestinationList creates []XBulkEmailDestination by the email destination and other data.
+func NewXBulkEmailDestinationList(to []string, templateData []map[string]interface{}, tags []map[string]string) []XBulkEmailDestination {
+	list := make([]XBulkEmailDestination, len(to))
+	useTemplateData := len(templateData) != 0
+	useTags := len(tags) != 0
+
+	for i := range to {
+		v := XBulkEmailDestination{
+			To: []string{to[i]},
+		}
+		if useTemplateData {
+			v.TemplateData = templateData[i]
+		}
+		if useTags {
+			v.Tags = tags[i]
+		}
+
+		list[i] = v
+	}
+	return list
 }
 
 // ToRequest converts to SendBulkTemplatedEmailRequest.
 func (r XSendBulkTemplatedEmailRequest) ToRequest() (SendBulkTemplatedEmailRequest, error) {
 	req := SendBulkTemplatedEmailRequest{
-		Template: r.Template,
-		Source:   r.From,
+		Template:             r.Template,
+		Source:               r.From,
+		ConfigurationSetName: r.ConfigurationSetName,
 	}
 
 	if len(r.Destinations) != 0 {
@@ -82,6 +96,17 @@ func (r XSendBulkTemplatedEmailRequest) ToRequest() (SendBulkTemplatedEmailReque
 		}
 		req.DefaultTemplateData = string(b)
 	}
+
+	if len(r.DefaultTags) != 0 {
+		tags := make([]MessageTag, 0, len(r.DefaultTags))
+		for k, v := range r.DefaultTags {
+			tags = append(tags, MessageTag{
+				Name:  k,
+				Value: v,
+			})
+		}
+		req.DefaultTags = tags
+	}
 	return req, nil
 }
 
@@ -92,6 +117,7 @@ type XBulkEmailDestination struct {
 	Cc           []string
 	Bcc          []string
 	TemplateData map[string]interface{}
+	Tags         map[string]string
 }
 
 func (r XBulkEmailDestination) ToRequest() (BulkEmailDestination, error) {
@@ -110,6 +136,17 @@ func (r XBulkEmailDestination) ToRequest() (BulkEmailDestination, error) {
 			return req, err
 		}
 		req.ReplacementTemplateData = string(b)
+	}
+
+	if len(r.Tags) != 0 {
+		tags := make([]MessageTag, 0, len(r.Tags))
+		for k, v := range r.Tags {
+			tags = append(tags, MessageTag{
+				Name:  k,
+				Value: v,
+			})
+		}
+		req.ReplacementTags = tags
 	}
 	return req, nil
 }
