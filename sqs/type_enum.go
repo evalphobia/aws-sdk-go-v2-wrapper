@@ -23,6 +23,6 @@ const (
 	QueueAttributeNameRedrivePolicy                         QueueAttributeName = QueueAttributeName(SDK.QueueAttributeNameRedrivePolicy)
 	QueueAttributeNameFifoQueue                             QueueAttributeName = QueueAttributeName(SDK.QueueAttributeNameFifoQueue)
 	QueueAttributeNameContentBasedDeduplication             QueueAttributeName = QueueAttributeName(SDK.QueueAttributeNameContentBasedDeduplication)
-	QueueAttributeNameKmsMasterKeyId                        QueueAttributeName = QueueAttributeName(SDK.QueueAttributeNameKmsMasterKeyId)
+	QueueAttributeNameKmsMasterKeyID                        QueueAttributeName = QueueAttributeName(SDK.QueueAttributeNameKmsMasterKeyId)
 	QueueAttributeNameKmsDataKeyReusePeriodSeconds          QueueAttributeName = QueueAttributeName(SDK.QueueAttributeNameKmsDataKeyReusePeriodSeconds)
 )

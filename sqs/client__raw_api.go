@@ -47,6 +47,7 @@ func (svc *SQS) RawGetQueueAttributes(ctx context.Context, in *SDK.GetQueueAttri
 }
 
 // RawGetQueueUrl executes `GetQueueUrl` raw operation.
+//nolint:golint
 func (svc *SQS) RawGetQueueUrl(ctx context.Context, in *SDK.GetQueueUrlInput) (*SDK.GetQueueUrlResponse, error) {
 	return svc.client.GetQueueUrlRequest(in).Send(ctx)
 }

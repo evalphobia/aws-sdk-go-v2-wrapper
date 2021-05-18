@@ -144,18 +144,6 @@ type Message struct {
 	ReceiptHandle          string
 }
 
-func newMessageList(list []SDK.Message) []Message {
-	if len(list) == 0 {
-		return nil
-	}
-
-	results := make([]Message, len(list))
-	for i, v := range list {
-		results[i] = newMessage(v)
-	}
-	return results
-}
-
 func newMessage(o SDK.Message) Message {
 	result := Message{}
 
