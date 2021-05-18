@@ -12,6 +12,7 @@ type Endpoints struct {
 	PinpointEmail  string
 	S3             string
 	SES            string
+	SQS            string
 	SSM            string
 }
 
@@ -148,6 +149,21 @@ func (e Endpoints) GetSES() aws.ResolveWithEndpoint {
 		return aws.ResolveWithEndpointURL(envvar)
 	}
 	return aws.ResolveWithEndpointURL(e.SES)
+}
+
+func (e Endpoints) HasSQS() bool {
+	if e.SQS != "" {
+		return true
+	}
+	return EnvSQSEndpoint() != ""
+}
+
+func (e Endpoints) GetSQS() aws.ResolveWithEndpoint {
+	envvar := EnvSQSEndpoint()
+	if envvar != "" {
+		return aws.ResolveWithEndpointURL(envvar)
+	}
+	return aws.ResolveWithEndpointURL(e.SQS)
 }
 
 func (e Endpoints) HasSSM() bool {
