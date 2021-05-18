@@ -64,7 +64,11 @@ func main() {
 | Name | Description |
 |:--|:--|
 | `XCreateTemplate` | creates an email template. |
+| `XGetTemplate` | gets an email template. |
+| `XUpdateTemplate` | updates an email template. |
 | `XSendBulkTemplatedEmail` | sends bulk emails using a template. |
+| `XSendBulkTemplatedEmailEachList` | sends bulk emails from `[]string` of email list. |
 | `XSendEmailHTML` | sends HTML type email. |
 | `XSendEmailText` | sends text type email. |
 | `XSendRawEmail` | sends email with easy option for attachment files. |
+| `XSendTemplatedEmail` | sends a email using a template. |

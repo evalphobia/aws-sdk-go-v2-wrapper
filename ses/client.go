@@ -18,6 +18,9 @@ type SES struct {
 
 	logger  log.Logger
 	errWrap func(errors.ErrorData) error
+
+	// for xapi values
+	defaultConfigurationSet string
 }
 
 // New returns initialized *SES.
@@ -41,6 +44,11 @@ func New(conf config.Config) (*SES, error) {
 // GetClient gets original SDK client.
 func (svc *SES) GetClient() *SDK.Client {
 	return svc.client
+}
+
+// SetDefaultConfigurationSet sets defaultConfigurationSet.
+func (svc *SES) SetDefaultConfigurationSet(s string) {
+	svc.defaultConfigurationSet = s
 }
 
 // SetLogger sets logger.

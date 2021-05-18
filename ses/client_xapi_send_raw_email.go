@@ -15,6 +15,9 @@ func (svc *SES) XSendRawEmail(ctx context.Context, r XSendRawEmailRequest) error
 	if err != nil {
 		return err
 	}
+	if req.ConfigurationSetName != "" {
+		req.ConfigurationSetName = svc.defaultConfigurationSet
+	}
 
 	_, err = svc.SendRawEmail(ctx, req)
 	return err
