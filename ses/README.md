@@ -65,6 +65,7 @@ func main() {
 |:--|:--|
 | `XCreateTemplate` | creates an email template. |
 | `XGetTemplate` | gets an email template. |
+| `XExistsTemplate` | checks if the template exists or not. |
 | `XUpdateTemplate` | updates an email template. |
 | `XSendBulkTemplatedEmail` | sends bulk emails using a template. |
 | `XSendBulkTemplatedEmailEachList` | sends bulk emails from `[]string` of email list. |
