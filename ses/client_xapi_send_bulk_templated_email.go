@@ -12,7 +12,7 @@ func (svc *SES) XSendBulkTemplatedEmail(ctx context.Context, r XSendBulkTemplate
 	if err != nil {
 		return nil, err
 	}
-	if req.ConfigurationSetName != "" {
+	if req.ConfigurationSetName == "" {
 		req.ConfigurationSetName = svc.defaultConfigurationSet
 	}
 
