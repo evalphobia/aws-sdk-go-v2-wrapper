@@ -11,7 +11,7 @@ func (svc *SES) XSendTemplatedEmail(ctx context.Context, r XSendTemplatedEmailRe
 	if err != nil {
 		return nil, err
 	}
-	if req.ConfigurationSetName != "" {
+	if req.ConfigurationSetName == "" {
 		req.ConfigurationSetName = svc.defaultConfigurationSet
 	}
 
